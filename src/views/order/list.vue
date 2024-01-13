@@ -105,7 +105,6 @@
     {
       field: 'address',
       header: '地址',
-      sortable: true,
       class: 'w-2',
     },
     {

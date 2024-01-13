@@ -6,12 +6,6 @@
   </Card>
 </template>
 
-<script>
-export default {
-  name: "visits-trend"
-}
-</script>
+<script lang="ts" setup></script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
