@@ -102,12 +102,33 @@ export const orderState = [
   },
 ]
 
+// 下单方式
+export const orderMethod = [
+  {
+    label: 'APP下单',
+    value: 0,
+  },
+  {
+    label: '小程序下单',
+    value: 1,
+  },
+  {
+    label: 'H5网站下单',
+    value: 2,
+  },
+  {
+    label: 'Web网站下单',
+    value: 3,
+  },
+]
+
 const enums = {
   paymentMode,
   rentType,
   homestayTag,
   pickupMode,
   orderState,
+  orderMethod,
 }
 
 export const getEnumLabel = (enumType, value: number) => {

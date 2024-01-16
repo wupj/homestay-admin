@@ -8,8 +8,8 @@
             grid
             w-2
             p-2
+            text-white
             border-round-xl
-            surface-100
             flex flex-column
             justify-content-start
             align-items-center
@@ -75,6 +75,21 @@
   .overview-card {
     .grid {
       height: 7rem;
+      &:nth-of-type(1) {
+        background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+      }
+      &:nth-of-type(2) {
+        background-image: linear-gradient(120deg, #3b41c5 0%, #a981bb 49%, #ffc8a9 100%);
+      }
+      &:nth-of-type(3) {
+        background-image: linear-gradient(120deg, #d9afd9 0%, #97d9e1 100%);
+      }
+      &:nth-of-type(4) {
+        background-image: linear-gradient(120deg, #9795f0 0%, #fbc8d4 100%);
+      }
+      &:nth-of-type(5) {
+        background-image: linear-gradient(120deg, #a8caba 0%, #5d4157 100%);
+      }
     }
   }
 </style>

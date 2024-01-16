@@ -19,7 +19,7 @@ export default defineConfig({
     Components({
       extensions: ['vue'],
       include: [/\.vue$/, /\.vue\?vue/],
-      dirs: ['src/**/*', 'node_modules/primevue/**/*'],
+      dirs: ['src/components/*', 'node_modules/primevue/**/*'],
     }),
   ],
   server: {

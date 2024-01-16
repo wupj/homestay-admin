@@ -8,7 +8,6 @@
     </div>
     <div class="justify-content-end">
       <slot name="right" />
-      <Button icon="pi pi-download" v-tooltip.top="'导出'" text raised />
     </div>
   </div>
   <DataTable
@@ -82,6 +81,8 @@
     },
   })
 
+  const emit = defineEmits(['export'])
+
   const tableColumns = computed(() => {
     const columns = [...unref(props.columns)]
     if (props.showSerial) {
@@ -102,6 +103,11 @@
     }
     return columns
   })
+
+  const handleExport = async () => {
+    await emit('export')
+  }
+
 </script>
 
 <style scoped></style>

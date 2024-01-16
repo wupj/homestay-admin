@@ -42,19 +42,36 @@
           :tableData="tableData"
           :pagination="pagination"
           @page="handlePage"
+          @export="handleExport"
           showCheckbox
-        />
+        >
+          <template #left>
+            <Button
+              icon="pi pi-trash"
+              severity="danger"
+              label="取消"
+              :disabled="!selectRow.length"
+              @click="handleOpenDialog('cancel')"
+            />
+          </template>
+        </Table>
       </template>
     </Card>
+    <OrderDialog ref="dialogRef" @done="handleSearch" />
   </div>
 </template>
 
 <script lang="tsx" setup>
   import { ref, onMounted } from 'vue'
+  import { useRouter } from 'vue-router'
   import EnumSelect from '@/components/business/enum-select'
   import Table from '@/components/basic/table'
+  import OrderDialog from './widgets/order-dialog'
   import { getOrderList } from '@/api'
   import { getEnumLabel } from '@/utils/enums'
+  import { exportExcel } from '@/utils'
+
+  const router = useRouter()
 
   const queryForm = ref({
     homestayName: '',
@@ -140,14 +157,14 @@
               label="入住"
               severity="info"
               text
-              onClick={() => handleCheck(data)}
+              onClick={() => handleOpenDialog('check', data)}
             />
             <Button
               class="p-0 ml-4"
               label="取消"
               severity="warning"
               text
-              onClick={() => handleCancel(data)}
+              onClick={() => handleOpenDialog('cancel', data)}
             />
           </div>
         )
@@ -190,6 +207,7 @@
     },
   ])
   const selectRow = ref([])
+  const dialogRef = ref()
 
   const getTableData = async () => {
     loading.value = true
@@ -229,15 +247,20 @@
   }
 
   const handleDetail = (row) => {
-    console.log(row)
+    router.push(`/order/detail/${row.orderId}`)
   }
 
-  const handleCheck = (row) => {
-    console.log(row)
+  const handleOpenDialog = (type, row) => {
+    dialogRef.value.handleOpen(type, row)
   }
 
-  const handleCancel = (row) => {
-    console.log(row)
+  const handleExport = async () => {
+    const {
+      response: {
+        value: { data },
+      },
+    } = await getOrderList(queryParams.value)
+    await exportExcel(tableColumn.value, data)
   }
 
   onMounted(() => {

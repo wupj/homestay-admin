@@ -61,6 +61,11 @@ export function getOrderList(data: unknown) {
   return useAxios('/api/orderManage/getOrderList', { method: 'post', data }, instance)
 }
 
+// 订单详情
+export function getOrderDetail(data: unknown) {
+  return useAxios('/api/orderManage/getOrderDetail', { method: 'post', data }, instance)
+}
+
 // 民宿列表
 export function getHomestayList(data: unknown) {
   return useAxios('/api/homestayManage/getHomestayList', { method: 'post', data }, instance)
