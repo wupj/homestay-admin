@@ -55,7 +55,7 @@ export const exportExcel = async (columns: any[], data: any[], fileName?: string
   const tableWidth = exportColumns.length * 20
   const headers = exportColumns.map((item: ColumnProps) => {
     // @ts-ignore
-    const width = (parseInt(item.width, 10) / 100) * tableWidth || 100
+    const width = (parseInt(item.width, 10) / 100) * tableWidth || 20
     return {
       header: item.header,
       key: item.field,
@@ -73,17 +73,25 @@ export const exportExcel = async (columns: any[], data: any[], fileName?: string
   const headerRow = worksheet.getRow(1)
   // 精准设置表头样式
   headerRow.eachCell((cell, colNum) => {
+    // cell.alignment = { vertical: 'middle', horizontal: 'center' }
     // 设置背景色
     cell.fill = {
       type: 'pattern',
       pattern: 'solid',
-      fgColor: { argb: 'f2f3f5' },
+      fgColor: { argb: 'f9fafb' },
     }
     // 设置字体
     cell.font = {
       size: 12,
       name: '微软雅黑',
-      color: { argb: '1d2129' },
+      color: { argb: '374151' },
+    }
+    // 设置网格线
+    cell.border = {
+      top: { style: 'thin', color: { argb: 'e5e7eb' } },
+      left: { style: 'thin', color: { argb: 'e5e7eb' } },
+      bottom: { style: 'thin', color: { argb: 'e5e7eb' } },
+      right: { style: 'thin', color: { argb: 'e5e7eb' } },
     }
   })
   // 添加行

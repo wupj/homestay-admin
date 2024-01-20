@@ -3,6 +3,7 @@ import PrimeVue from 'primevue/config'
 import Tooltip from 'primevue/tooltip'
 import Ripple from 'primevue/ripple'
 import ToastService from 'primevue/toastservice'
+import ConfirmationService from 'primevue/confirmationservice'
 import router from '@/router'
 import store from '@/store'
 
@@ -22,6 +23,7 @@ app.directive('ripple', Ripple)
 
 app.use(PrimeVue)
 app.use(ToastService)
+app.use(ConfirmationService)
 app.use(router)
 app.use(store)
 app.mount('#app')

@@ -36,3 +36,27 @@ html {
     padding: 0;
   }
 }
+
+.is-required {
+  position: relative;
+  &::before {
+    content: '*';
+    position: absolute;
+    height: 100%;
+    top: 50%;
+    left: -1rem;
+    transform: translateY(-50%);
+    color: red;
+    display: block;
+  }
+}
+
+.form-field {
+  position: relative;
+  margin-bottom: 1.5rem;
+  .p-error {
+    position: absolute;
+    left: 0;
+    bottom: -1.3rem
+  }
+}

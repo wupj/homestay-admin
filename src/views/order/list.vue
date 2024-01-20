@@ -57,6 +57,7 @@
         </Table>
       </template>
     </Card>
+    <Toast position="center" />
     <OrderDialog ref="dialogRef" @done="handleSearch" />
   </div>
 </template>
@@ -64,6 +65,7 @@
 <script lang="tsx" setup>
   import { ref, onMounted } from 'vue'
   import { useRouter } from 'vue-router'
+  import Toast from 'primevue/toast'
   import EnumSelect from '@/components/business/enum-select'
   import Table from '@/components/basic/table'
   import OrderDialog from './widgets/order-dialog'

@@ -16,6 +16,11 @@ export function login(data: unknown) {
   return useAxios('/api/login', { method: 'post', data }, instance)
 }
 
+// 行政区划
+export function getAdministrativeDivisions() {
+  return useAxios('/api/common/getAdministrativeDivisions', { method: 'get' }, instance)
+}
+
 // 经营概况
 export function getManageProfile() {
   return useAxios('/api/overview/getManageProfile', { method: 'get' }, instance)

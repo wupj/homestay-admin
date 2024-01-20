@@ -32,19 +32,45 @@
           :tableData="tableData"
           :pagination="pagination"
           @page="handlePage"
+          @export="handleExport"
           showCheckbox
-        />
+        >
+          <template #left>
+            <Button
+              icon="pi pi-trash"
+              severity="danger"
+              label="删除"
+              :disabled="!selectRow.length"
+              @click="handleDelete(null)"
+            />
+          </template>
+          <template #right>
+            <Button icon="pi pi-plus" label="添加" @click="handleEdit(null)" />
+          </template>
+        </Table>
       </template>
     </Card>
+    <Toast position="center" />
+    <ConfirmDialog class="w-20rem" :draggable="false" />
+    <AddDialog ref="dialogRef" @done="handleSearch" />
   </div>
 </template>
 
 <script lang="tsx" setup>
   import { ref, onMounted } from 'vue'
+  import Toast from 'primevue/toast'
+  import ConfirmDialog from 'primevue/confirmdialog'
+  import { useToast } from 'primevue/usetoast'
+  import { useConfirm } from 'primevue/useconfirm'
   import EnumSelect from '@/components/business/enum-select'
   import Table from '@/components/basic/table'
+  import AddDialog from './widgets/add-dialog'
   import { getHomestayList } from '@/api'
   import { getEnumLabel } from '@/utils/enums'
+  import { exportExcel } from '@/utils'
+
+  const toast = useToast()
+  const confirm = useConfirm()
 
   const queryForm = ref({
     homestayName: '',
@@ -154,6 +180,7 @@
   const tableData = ref([])
 
   const selectRow = ref([])
+  const dialogRef = ref()
 
   const getTableData = async () => {
     loading.value = true
@@ -193,11 +220,33 @@
   }
 
   const handleEdit = (row) => {
-    console.log(row)
+    dialogRef.value.handleOpen(row)
   }
 
   const handleDelete = (row) => {
     console.log(row)
+    confirm.require({
+      header: '删除',
+      message: '确认要删除吗?',
+      acceptLabel: '确定',
+      rejectLabel: '取消',
+      acceptIcon: 'pi pi-check',
+      rejectIcon: 'pi pi-times',
+      rejectClass: 'p-button-raised p-button-text mr-4',
+      accept: () => {
+        toast.add({ severity: 'success', detail: '操作成功', life: 3000 })
+        handleSearch()
+      },
+    })
+  }
+
+  const handleExport = async () => {
+    const {
+      response: {
+        value: { data },
+      },
+    } = await getHomestayList(queryParams.value)
+    await exportExcel(tableColumn.value, data)
   }
 
   onMounted(() => {

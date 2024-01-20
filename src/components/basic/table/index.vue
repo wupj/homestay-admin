@@ -8,6 +8,14 @@
     </div>
     <div class="justify-content-end">
       <slot name="right" />
+      <Button
+        class="ml-4"
+        icon="pi pi-download"
+        v-tooltip.top="'导出'"
+        @click="handleExport"
+        text
+        raised
+      />
     </div>
   </div>
   <DataTable
@@ -37,7 +45,7 @@
 </template>
 
 <script lang="tsx" setup>
-  import { computed, unref } from 'vue'
+  import { ref, unref, computed } from 'vue'
 
   const props = defineProps({
     columns: {
@@ -104,10 +112,13 @@
     return columns
   })
 
-  const handleExport = async () => {
-    await emit('export')
-  }
+  const exportLoading = ref(false)
 
+  const handleExport = async () => {
+    exportLoading.value = true
+    await emit('export')
+    exportLoading.value = false
+  }
 </script>
 
 <style scoped></style>

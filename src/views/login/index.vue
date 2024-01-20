@@ -75,6 +75,7 @@
         </div>
       </template>
     </Card>
+    <Toast position="center" />
   </div>
 </template>
 
@@ -82,14 +83,16 @@
   import { ref, onBeforeMount } from 'vue'
   import { useRouter } from 'vue-router'
   import { useForm } from 'vee-validate'
+  import Toast from 'primevue/toast'
+  import { useToast } from 'primevue/usetoast'
   import Captcha from '@/components/basic/captcha'
 
   import { useQRCode } from '@vueuse/integrations/useQRCode'
   import { useUserStore } from '@/store'
   import { getCaptcha, login } from '@/api'
-  import {setCookie} from "@/utils/cookie";
 
   const router = useRouter()
+  const toast = useToast()
   const qrcode = useQRCode('text-to-encode')
   const userStore = useUserStore()
 
@@ -147,7 +150,8 @@
       userStore.setUserInfo(data)
       await router.push('/home')
     } else {
-      handleReset()
+      toast.add({ severity: 'error', detail: message, life: 3000 })
+      // handleReset()
     }
   })
 

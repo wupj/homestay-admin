@@ -51,6 +51,7 @@
           :tableData="tableData"
           :pagination="pagination"
           @page="handlePage"
+          @export="handleExport"
           showSerial
         />
       </template>
@@ -62,6 +63,7 @@
   import { ref, onMounted } from 'vue'
   import Table from '@/components/basic/table'
   import { getUserList, getLogLost } from '@/api'
+  import { exportExcel } from '@/utils'
 
   const queryForm = ref({
     userName: '',
@@ -166,12 +168,13 @@
     handleSearch()
   }
 
-  const handleEdit = (row) => {
-    console.log(row)
-  }
-
-  const handleDelete = (row) => {
-    console.log(row)
+  const handleExport = async () => {
+    const {
+      response: {
+        value: { data },
+      },
+    } = await getLogLost(queryParams.value)
+    await exportExcel(tableColumn.value, data)
   }
 
   onMounted(() => {

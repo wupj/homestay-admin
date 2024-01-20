@@ -1,6 +1,16 @@
 <template>
+  <MultiSelect
+    v-if="multiple"
+    :class="className"
+    :options="options"
+    :optionLabel="optionLabel"
+    :optionValue="optionValue"
+    :placeholder="placeholder"
+    v-bind="$attrs"
+  />
   <Dropdown
-    class="w-12rem"
+    v-else
+    :class="className"
     :options="options"
     :optionLabel="optionLabel"
     :optionValue="optionValue"
@@ -9,11 +19,15 @@
   />
 </template>
 
-<script lang="ts" setup>
+<script lang="tsx" setup>
   import { computed } from 'vue'
   import { getEnum } from '@/utils/enums'
 
   const props = defineProps({
+    className: {
+      type: String,
+      default: 'w-12rem',
+    },
     enumType: {
       type: String,
       required: true,
@@ -36,6 +50,10 @@
     },
     placeholder: {
       type: String,
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
     },
   })
 
