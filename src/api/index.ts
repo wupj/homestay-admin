@@ -72,7 +72,7 @@ export function getOrderDetail(data: unknown) {
 }
 
 // 民宿列表
-export function getHomestayList(data: unknown) {
+export function getHomestayList(data?: unknown) {
   return useAxios('/api/homestayManage/getHomestayList', { method: 'post', data }, instance)
 }
 

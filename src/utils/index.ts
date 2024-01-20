@@ -39,6 +39,24 @@ export const getFileSuffix = (fileUrl: string) => {
 }
 
 /**
+ * 生成路由
+ * @param  {String}   menus   菜单
+ */
+export const generateRoute = (menus: []) => {
+  if (!menus.length) return
+  const modules = import.meta.glob('@/views/**/*.vue')
+  menus.forEach((menu: any) => {
+    if (menu.children) {
+      menu.children = generateRoute(menu.children)
+    }
+    if (menu.component && !menu.children) {
+      menu.component = modules[`/src/views${menu.component}.vue`]
+    }
+  })
+  return menus
+}
+
+/**
  * 导出表格数据
  * @param  {Array}      columns      导出的列
  * @param  {Array}      data         导出的数据
