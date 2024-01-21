@@ -86,6 +86,11 @@ export function getRoleList(data: unknown) {
   return useAxios('/api/roleManage/getRoleList', { method: 'post', data }, instance)
 }
 
+// 权限列表
+export function getAuthTree(data: unknown) {
+  return useAxios('/api/roleManage/getAuthTree', { method: 'post', data }, instance)
+}
+
 // 用户列表
 export function getUserList(data?: unknown) {
   return useAxios('/api/userManage/getUserList', { method: 'post', data }, instance)
