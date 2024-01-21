@@ -82,7 +82,7 @@ export function getCouponList(data: unknown) {
 }
 
 // 角色列表
-export function getRoleList(data: unknown) {
+export function getRoleList(data?: unknown) {
   return useAxios('/api/roleManage/getRoleList', { method: 'post', data }, instance)
 }
 
