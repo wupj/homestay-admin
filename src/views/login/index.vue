@@ -6,62 +6,62 @@
           <div class="image"></div>
           <div class="form-box flex-1 ml-4">
             <div class="title text-center text-4xl">欢迎登录</div>
-            <TabView class="mt-4" :active-index="activeIndex">
+            <TabView class="mt-4" :active-index="activeIndex" @tab-change="changeTab">
               <TabPanel header="账号登录">
-                <form class="flex flex-column gap-4">
-                  <div class="w-full">
-                    <div class="p-input-icon-left w-full">
-                      <i class="pi pi-user" />
-                      <InputText
-                        class="w-full"
-                        v-model="username"
-                        v-bind="usernameProps"
-                        placeholder="请输入账号"
-                      />
+                <form class="flex flex-column gap-2">
+                  <div class="form-field w-full flex justify-content-start align-items-center">
+                    <div class="flex-1 relative">
+                      <div class="p-input-icon-left w-full">
+                        <i class="pi pi-user" />
+                        <InputText class="w-full" v-model="form.name" placeholder="请输入账号" />
+                      </div>
+                      <small
+                        class="block p-error text-base"
+                        v-if="errorFields.name && errorFields.name.length"
+                        >{{ errorFields.name[0].message }}</small
+                      >
                     </div>
-                    <small class="block p-error mt-2 text-base" v-if="errors.username">{{
-                      errors.username
-                    }}</small>
                   </div>
-                  <div class="w-full">
-                    <div class="p-input-icon-left w-full">
-                      <i class="pi pi-lock" />
-                      <InputText
-                        class="w-full"
-                        type="password"
-                        v-model="password"
-                        v-bind="passwordProps"
-                        placeholder="请输入密码"
-                      />
+                  <div class="form-field w-full flex justify-content-start align-items-center">
+                    <div class="flex-1 relative">
+                      <div class="p-input-icon-left w-full">
+                        <i class="pi pi-lock" />
+                        <InputText
+                          class="w-full"
+                          v-model="form.password"
+                          placeholder="请输入密码"
+                        />
+                      </div>
+                      <small
+                        class="block p-error text-base"
+                        v-if="errorFields.password && errorFields.password.length"
+                        >{{ errorFields.password[0].message }}</small
+                      >
                     </div>
-                    <small class="block p-error mt-2 text-base" v-if="errors.password">{{
-                      errors.password
-                    }}</small>
                   </div>
-                  <div class="w-full">
-                    <div class="flex align-items-center w-full">
-                      <InputText
-                        class="w-full"
-                        v-model="captcha"
-                        v-bind="captchaProps"
-                        placeholder="请输入验证码"
-                      />
+                  <div class="form-field w-full flex justify-content-start align-items-center">
+                    <div class="flex align-items-center w-fullrelative">
+                      <InputText class="w-full" v-model="form.captcha" placeholder="请输入验证码" />
                       <Captcha
                         class="ml-2"
-                        :code="captchaValue"
+                        :code="captcha"
                         :height="33.8"
                         @refresh="queryCaptcha"
                       />
+                      <small
+                        class="block p-error text-base"
+                        v-if="errorFields.captcha && errorFields.captcha.length"
+                        >{{ errorFields.captcha[0].message }}</small
+                      >
                     </div>
-                    <small class="block p-error mt-2 text-base" v-if="errors.captcha">{{
-                      errors.captcha
-                    }}</small>
                   </div>
-                  <div class="flex align-items-center">
-                    <Checkbox v-model="notLogin" inputId="not-login" :binary="true" />
-                    <label class="ml-2 cursor-pointer" for="not-login">1个月内免登录</label>
+                  <div class="form-field w-full flex justify-content-start align-items-center">
+                    <div class="flex align-items-center">
+                      <Checkbox v-model="form.notLogin" inputId="not-login" :binary="true" />
+                      <label class="ml-2 cursor-pointer" for="not-login">1个月内免登录</label>
+                    </div>
                   </div>
-                  <Button label="登录" :loading="submitLoading" @click="clickSubmit" />
+                  <Button label="登录" :loading="submitLoading" @click="handleSubmit" />
                 </form>
               </TabPanel>
               <TabPanel header="扫码登录">
@@ -82,12 +82,14 @@
 <script lang="ts" setup>
   import { ref, onBeforeMount } from 'vue'
   import { useRouter } from 'vue-router'
-  import { useForm } from 'vee-validate'
   import Toast from 'primevue/toast'
   import { useToast } from 'primevue/usetoast'
   import Captcha from '@/components/basic/captcha'
 
   import { useQRCode } from '@vueuse/integrations/useQRCode'
+  import { Rules } from 'async-validator'
+  import useValidator from '@/hooks/useValidator'
+  import useLoading from '@/hooks/useLoading'
   import { useUserStore } from '@/store'
   import { getCaptcha, login } from '@/api'
 
@@ -95,65 +97,75 @@
   const toast = useToast()
   const qrcode = useQRCode('text-to-encode')
   const userStore = useUserStore()
+  const [submitLoading, setSubmitLoading] = useLoading(false)
 
   const activeIndex = ref(0)
-  const submitLoading = ref(false)
-  const captchaValue = ref('')
-  const notLogin = ref(false)
-
-  const { defineField, errors, handleSubmit, handleReset } = useForm({
-    validationSchema: {
-      username: (value) => {
-        if (!value) {
-          return '请输入账号'
+  const captcha = ref('')
+  const form = ref({
+    name: '',
+    password: '',
+    captcha: '',
+    notLogin: false,
+  })
+  const rules: Rules = {
+    name: {
+      required: true,
+      message: '请输入账号',
+    },
+    password: {
+      required: true,
+      message: '请输入密码',
+    },
+    captcha: {
+      required: true,
+      validator: (rule, value, callback) => {
+        if (!value.trim()) {
+          callback(new Error('请输入验证码'))
         }
-        return true
-      },
-      password: (value) => {
-        if (!value) {
-          return '请输入密码'
+        if (value.toLocaleUpperCase() !== captcha.value.toLocaleUpperCase()) {
+          callback(new Error('验证码错误'))
         }
-        return true
-      },
-      captcha: (value) => {
-        if (!value) {
-          return '请输入验证码'
-        }
-        if (value.toLocaleUpperCase() !== captchaValue.value.toLocaleUpperCase()) {
-          return '验证码错误'
-        }
-        return true
+        callback()
       },
     },
-  })
-
-  const [username, usernameProps] = defineField('username')
-  const [password, passwordProps] = defineField('password')
-  const [captcha, captchaProps] = defineField('captcha')
+  }
+  let { execute, errorFields, resetFields } = useValidator(form, rules)
 
   const queryCaptcha = async () => {
     const { data } = await getCaptcha()
-    captchaValue.value = data.value
+    captcha.value = data.value
   }
 
-  const clickSubmit = handleSubmit(async () => {
-    const {
-      response: {
-        value: { data, code, message },
-      },
-    } = await login({
-      name: username.value,
-      password: password.value,
-      notLogin: notLogin.value,
-    })
-    if (code === 200) {
-      userStore.setUserInfo(data)
-      await router.push('/home')
-    } else {
-      toast.add({ severity: 'error', detail: message, life: 3000 })
-      // handleReset()
+  const handleSubmit = async () => {
+    const { pass } = await execute()
+    if (pass) {
+      setSubmitLoading(true)
+      const {
+        response: {
+          value: { data, code, message },
+        },
+      } = await login(form.value)
+      setSubmitLoading(false)
+      if (code === 200) {
+        userStore.setUserInfo(data)
+        await router.push('/home')
+      } else {
+        toast.add({ severity: 'error', detail: message, life: 3000 })
+        resetFields()
+      }
     }
-  })
+  }
+
+  const changeTab = () => {
+    form.value = {
+      name: '',
+      password: '',
+      captcha: '',
+      notLogin: false,
+    }
+    queryCaptcha()
+    resetFields()
+  }
 
   onBeforeMount(() => {
     queryCaptcha()

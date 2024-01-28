@@ -32,11 +32,11 @@
               v-model="form[item.prop]"
               :placeholder="item.placeholder"
             />
-            <!--<small
+            <small
               class="block p-error text-base"
               v-if="errorFields[item.prop] && errorFields[item.prop].length"
               >{{ errorFields[item.prop][0].message }}</small
-            >-->
+            >
           </div>
         </div>
       </form>
@@ -51,6 +51,8 @@
 <script lang="ts" setup>
   import { ref, defineExpose } from 'vue'
   import { useToast } from 'primevue/usetoast'
+  import { Rules } from 'async-validator'
+  import useValidator from '@/hooks/useValidator'
 
   const emit = defineEmits(['done'])
 
@@ -83,6 +85,18 @@
     roleName: '',
     describe: '',
   })
+  const rules: Rules = {
+    roleNo: {
+      required: true,
+      message: '请输入角色编号',
+    },
+    roleName: {
+      required: true,
+      message: '请输入角色名称',
+    },
+  }
+
+  const { execute, errorFields, resetFields } = useValidator(form, rules)
 
   const handleOpen = (row: any) => {
     operateType.value = row ? 'edit' : 'add'
@@ -99,16 +113,20 @@
     Object.keys(form.value).forEach((key) => {
       form.value[key] = ''
     })
+    resetFields()
   }
 
   const handleSubmit = async () => {
-    toast.add({
-      severity: 'success',
-      detail: '操作成功',
-      life: 3000,
-    })
-    handleClose()
-    emit('done')
+    const { pass } = await execute()
+    if (pass) {
+      toast.add({
+        severity: 'success',
+        detail: '操作成功',
+        life: 3000,
+      })
+      handleClose()
+      emit('done')
+    }
   }
 
   defineExpose({

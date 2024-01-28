@@ -55,11 +55,11 @@
               v-model="form[item.prop]"
               :placeholder="item.placeholder"
             />
-            <!--<small
+            <small
               class="block p-error text-base"
               v-if="errorFields[item.prop] && errorFields[item.prop].length"
               >{{ errorFields[item.prop][0].message }}</small
-            >-->
+            >
           </div>
         </div>
       </form>
@@ -75,14 +75,17 @@
   import { ref, defineExpose } from 'vue'
   import { useToast } from 'primevue/usetoast'
   import { getRoleList } from '@/api'
+  import { Rules } from 'async-validator'
+  import useValidator from '@/hooks/useValidator'
+  import useLoading from "@/hooks/useLoading";
 
   const emit = defineEmits(['done'])
 
   const toast = useToast()
+  const [roleLoading, setRoleLoading] = useLoading(false)
 
   const visible = ref(false)
   const operateType = ref('')
-  const roleLoading = ref(false)
   const roleList = ref([])
   const formArr = ref([
     {
@@ -143,6 +146,34 @@
     state: true,
     roleId: null,
   })
+  const rules: Rules = {
+    accountName: {
+      required: true,
+      message: '请输入账号',
+    },
+    userName: {
+      required: true,
+      message: '请输入真实姓名',
+    },
+    password: {
+      required: true,
+      message: '请输入密码',
+    },
+    confirmPassword: {
+      required: true,
+      message: '请再次输入密码',
+    },
+    phone: {
+      required: true,
+      message: '请输入手机号码',
+    },
+    state: {
+      required: true,
+      message: '请选择状态',
+    },
+  }
+
+  const { execute, errorFields, resetFields } = useValidator(form, rules)
 
   const handleOpen = (row: any) => {
     operateType.value = row ? 'edit' : 'add'
@@ -156,13 +187,13 @@
   }
 
   const getRoleData = async () => {
-    roleLoading.value = true
+    setRoleLoading(true)
     const {
       response: {
         value: { data },
       },
     } = await getRoleList()
-    roleLoading.value = false
+    setRoleLoading(false)
     roleList.value = data
   }
 
@@ -175,16 +206,20 @@
         form.value[key] = ''
       }
     })
+    resetFields()
   }
 
   const handleSubmit = async () => {
-    toast.add({
-      severity: 'success',
-      detail: '操作成功',
-      life: 3000,
-    })
-    handleClose()
-    emit('done')
+    const { pass } = await execute()
+    if (pass) {
+      toast.add({
+        severity: 'success',
+        detail: '操作成功',
+        life: 3000,
+      })
+      handleClose()
+      emit('done')
+    }
   }
 
   defineExpose({

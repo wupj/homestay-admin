@@ -72,6 +72,7 @@
   import { getOrderList } from '@/api'
   import { getEnumLabel } from '@/utils/enums'
   import { exportExcel } from '@/utils'
+  import useLoading from '@/hooks/useLoading'
 
   const router = useRouter()
 
@@ -88,7 +89,7 @@
     state: undefined,
   })
 
-  const loading = ref(false)
+  const [loading, setLoading] = useLoading(false)
   const pagination = ref({
     pageIndex: 1,
     pageSize: 10,
@@ -212,7 +213,7 @@
   const dialogRef = ref()
 
   const getTableData = async () => {
-    loading.value = true
+    setLoading(true)
     const {
       response: {
         value: { data, total },
@@ -222,7 +223,7 @@
       pageSize: pagination.value.pageSize,
       ...queryParams.value,
     })
-    loading.value = false
+    setLoading(false)
     tableData.value = data
     pagination.value.total = total
   }

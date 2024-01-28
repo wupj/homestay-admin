@@ -38,9 +38,9 @@
 <script lang="ts" setup>
   import { ref, defineExpose } from 'vue'
   import Toast from 'primevue/toast'
-  import { useAsyncValidator } from '@vueuse/integrations/useAsyncValidator'
-  import type { Rules } from 'async-validator'
   import { useToast } from 'primevue/usetoast'
+  import type { Rules } from 'async-validator'
+  import useValidator from '@/hooks/useValidator'
 
   const emit = defineEmits(['done'])
 
@@ -64,7 +64,7 @@
       },
     ],
   }
-  let { execute, errorInfo, errorFields } = useAsyncValidator(form, rules, { immediate: false })
+  let { execute, errorFields, resetFields } = useValidator(form, rules)
 
   const handleOpen = (type: string, row: any) => {
     console.log(row)
@@ -75,7 +75,7 @@
   const handleClose = () => {
     visible.value = false
     form.value.remark = ''
-    errorInfo.value = null
+    resetFields()
   }
 
   const handleSubmit = async () => {

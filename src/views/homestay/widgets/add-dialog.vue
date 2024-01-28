@@ -105,18 +105,19 @@
 
 <script lang="ts" setup>
   import { ref, defineExpose } from 'vue'
-  import { useAsyncValidator } from '@vueuse/integrations/useAsyncValidator'
-  import type { Rules } from 'async-validator'
   import { useToast } from 'primevue/usetoast'
+  import type { Rules } from 'async-validator'
+  import useValidator from '@/hooks/useValidator'
+  import useLoading from '@/hooks/useLoading'
   import { getAdministrativeDivisions } from '@/api'
 
   const emit = defineEmits(['done'])
 
   const toast = useToast()
+  const [areaLoading, setAreaLoading] = useLoading(false)
 
   const visible = ref(false)
   const operateType = ref('')
-  const areaLoading = ref(false)
   const areaList = ref([])
   const selectArea = ref('')
   const selectAreaArr = ref([])
@@ -208,7 +209,7 @@
     },
   }
 
-  const { execute, errorInfo, errorFields } = useAsyncValidator(form, rules, { immediate: false })
+  const { execute, errorFields, resetFields } = useValidator(form, rules)
 
   const handleOpen = (row: any) => {
     operateType.value = row ? 'edit' : 'add'
@@ -226,14 +227,14 @@
   }
 
   const getAreaList = async () => {
-    areaLoading.value = true
+    setAreaLoading(true)
     const {
       response: {
         value: { data },
       },
     } = await getAdministrativeDivisions()
     areaList.value = data
-    areaLoading.value = false
+    setAreaLoading(false)
   }
 
   const changArea = ({ value }) => {
@@ -254,11 +255,11 @@
 
   const handleClose = () => {
     visible.value = false
-    errorInfo.value = null
     Object.keys(form.value).forEach((key) => {
       form.value[key] = ''
     })
     file.value = null
+    resetFields()
   }
 
   const handleSubmit = async () => {
@@ -282,12 +283,12 @@
 </script>
 
 <style lang="scss" scoped>
-.money-input {
-  width: calc(100% - 1.75rem) !important;
-}
-.unit {
-  width: 1.25rem;
-  text-align: center;
-  display: inline-block;
-}
+  .money-input {
+    width: calc(100% - 1.75rem) !important;
+  }
+  .unit {
+    width: 1.25rem;
+    text-align: center;
+    display: inline-block;
+  }
 </style>

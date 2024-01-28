@@ -91,11 +91,11 @@
               v-model="form[item.prop]"
               :placeholder="item.placeholder"
             />
-            <!--<small
+            <small
               class="block p-error text-base"
               v-if="errorFields[item.prop] && errorFields[item.prop].length"
               >{{ errorFields[item.prop][0].message }}</small
-            >-->
+            >
           </div>
         </div>
       </form>
@@ -111,14 +111,17 @@
   import { ref, defineExpose } from 'vue'
   import { useToast } from 'primevue/usetoast'
   import { getHomestayList } from '@/api'
+  import { Rules } from 'async-validator'
+  import useValidator from '@/hooks/useValidator'
+  import useLoading from '@/hooks/useLoading'
 
   const emit = defineEmits(['done'])
 
   const toast = useToast()
+  const [homestayLoading, setHomestayLoading] = useLoading(false)
 
   const visible = ref(false)
   const operateType = ref('')
-  const homestayLoading = ref(false)
   const homestayList = ref([])
   const formArr = ref([
     {
@@ -182,6 +185,39 @@
     pickupMode: '',
     moreInfo: '',
   })
+  const rules: Rules = {
+    couponName: {
+      required: true,
+      message: '请输入优惠券名称',
+    },
+    nominalValue: {
+      required: true,
+      message: '请输入面值',
+    },
+    hasOrderAmount: {
+      required: true,
+      validator: (rule, value, callback) => {
+        if (value && form.value.orderAmount.trim() === '') {
+          callback(new Error('请输入订单金额'))
+        }
+        callback()
+      }
+    },
+    releasedQuantity: {
+      required: true,
+      message: '请输入发放数量',
+    },
+    time: {
+      required: true,
+      message: '请选择有效期',
+    },
+    pickupMode: {
+      required: true,
+      message: '请选择领取方式',
+    },
+  }
+
+  const { execute, errorFields, resetFields } = useValidator(form, rules)
 
   const handleOpen = (row: any) => {
     operateType.value = row ? 'edit' : 'add'
@@ -200,13 +236,13 @@
   }
 
   const getHomestayData = async () => {
-    homestayLoading.value = true
+    setHomestayLoading(true)
     const {
       response: {
         value: { data },
       },
     } = await getHomestayList()
-    homestayLoading.value = false
+    setHomestayLoading(false)
     homestayList.value = data
   }
 
@@ -215,6 +251,7 @@
     Object.keys(form.value).forEach((key) => {
       form.value[key] = ''
     })
+    resetFields()
   }
 
   const handleSubmit = async () => {
@@ -223,13 +260,16 @@
     }
     form.value.effectiveTime = form.value?.time[0]
     form.value.failureTime = form.value?.time[1]
-    toast.add({
-      severity: 'success',
-      detail: '操作成功',
-      life: 3000,
-    })
-    handleClose()
-    emit('done')
+    const { pass } = await execute()
+    if (pass) {
+      toast.add({
+        severity: 'success',
+        detail: '操作成功',
+        life: 3000,
+      })
+      handleClose()
+      emit('done')
+    }
   }
 
   defineExpose({
