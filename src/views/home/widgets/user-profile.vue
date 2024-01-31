@@ -23,6 +23,7 @@
     {
       chartType: 'pie',
       radius: true,
+      unit: '人',
       group: {
         name: {
           man: '男性',
@@ -50,6 +51,7 @@
       xAxisField: 'category',
       yAxisField: 'ratio',
       legendName: '人数',
+      unit: '%',
     },
     barData,
     {

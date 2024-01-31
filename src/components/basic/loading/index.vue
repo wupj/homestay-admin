@@ -1,23 +1,21 @@
 <template>
-  <div
+  <BlockUI
+    v-if="loading"
+    :blocked="loading"
     class="
       loading-wrapper
       absolute
-      flex
-      flex-column
+      flex flex-column
       justify-content-center
       align-items-center
       w-full
       h-full
-      surface-900
-      opacity-40
       z-1
     "
-    v-if="loading"
   >
     <ProgressSpinner style="width: 24px; height: 24px" v-bind="$attrs" />
     <div class="text-white mt-2">{{ loadText }}</div>
-  </div>
+  </BlockUI>
 </template>
 
 <script lang="ts" setup>

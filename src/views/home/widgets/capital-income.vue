@@ -21,6 +21,7 @@
   const [options] = useEcharts(
     {
       chartType: 'pie',
+      unit: '元',
       group: {
         name: {
           earnestMoney: '定金',

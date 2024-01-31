@@ -80,6 +80,7 @@
   .overview-card {
     .grid {
       height: 7rem;
+      margin-top: 0;
       &:nth-of-type(1) {
         background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
       }

@@ -75,7 +75,6 @@ const pie = {
   tooltip: {
     show: true,
     appendToBody: true,
-    // formatter: '{b} : {c}%',
   },
   legend: {
     show: true,
@@ -101,16 +100,21 @@ export const getPieSeries = (baseOpt, baseData) => {
       value: baseData[key],
     })
   }
-  series.push({
+  const seriesOpt = {
     ...baseOptions[chartType].series[0],
     radius: radius ? ['45%', '65%'] : [0, '75%'],
     data,
-  })
+  }
+  if (unit) {
+    seriesOpt.tooltip = {
+      valueFormatter: (value) => `${value}${unit}`,
+    }
+  }
+  series.push(seriesOpt)
   return {
     ...baseOptions[chartType],
     tooltip: {
       ...baseOptions[chartType].tooltip,
-      // formatter: `{b} : {c}${unit}`,
     },
     series,
   }
@@ -118,7 +122,7 @@ export const getPieSeries = (baseOpt, baseData) => {
 
 export const getSeries = (baseOpt, baseData) => {
   let series = []
-  const { chartType, xAxisField, yAxisField, legendName, stack, type } = baseOpt
+  const { chartType, xAxisField, yAxisField, legendName, stack, type, unit = '' } = baseOpt
   const data = baseData.map((item) => {
     return {
       value:
@@ -142,6 +146,11 @@ export const getSeries = (baseOpt, baseData) => {
   if (chartType === 'bar' && type === 'horizontal') {
     xAxis = baseOptions[chartType].yAxis
     yAxis = baseOptions[chartType].xAxis
+  }
+  if (unit) {
+    seriesOpt.tooltip = {
+      valueFormatter: (value) => `${value}${unit}`,
+    }
   }
   series.push(seriesOpt)
   return {

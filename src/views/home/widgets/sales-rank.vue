@@ -2,7 +2,7 @@
   <Card>
     <template #content>
       <div class="card-title">销售额排行榜</div>
-      <div class="w-full h-20rem mt-2">
+      <div class="relative w-full h-20rem mt-2">
         <div class="w-full h-full">
           <div class="rank-title flex h-2rem align-items-center font-semibold">
             <span class="rank-index w-5rem">排行</span>
