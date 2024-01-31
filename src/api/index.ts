@@ -36,7 +36,7 @@ export function getAccessTrend(data: unknown) {
   return useAxios('/api/overview/getAccessTrend', { method: 'post', data }, instance)
 }
 
-// 用户画像
+// 客户性别占比
 export function getUserPortrait() {
   return useAxios('/api/overview/getUserPortrait', { method: 'get' }, instance)
 }

@@ -29,12 +29,21 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, 'src'),
     },
-    extensions: ['.ts', '.vue'],
+    extensions: ['.js', '.ts', '.vue'],
   },
   css: {
     preprocessorOptions: {
       scss: {
         additionalData: '@import "@/styles/variables.scss";',
+      },
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          echarts: ['echarts'],
+        },
       },
     },
   },

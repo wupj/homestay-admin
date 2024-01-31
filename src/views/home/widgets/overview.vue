@@ -2,7 +2,7 @@
   <Card class="overview-card">
     <template #content>
       <div class="card-title">经营概况</div>
-      <div class="flex justify-content-around align-items-center mt-4">
+      <div class="relative flex justify-content-around align-items-center mt-4">
         <div
           class="
             grid
@@ -23,6 +23,7 @@
             >{{ toFixed(profileData[list.ratio], 2) }}%</div
           >
         </div>
+        <Loading :loading="loading" />
       </div>
     </template>
   </Card>
@@ -30,9 +31,11 @@
 
 <script lang="ts" setup>
   import { onBeforeMount, ref } from 'vue'
+  import useLoading from '@/hooks/useLoading'
   import { toFixed } from '@/utils'
   import { getManageProfile } from '@/api'
 
+  const [loading, setLoading] = useLoading(false)
   const profileList = ref([
     {
       key: 'homestayTotal',
@@ -62,7 +65,9 @@
   const profileData = ref({})
 
   const getProfileData = async () => {
+    setLoading(true)
     const { data } = await getManageProfile()
+    setLoading(false)
     profileData.value = data.value
   }
 

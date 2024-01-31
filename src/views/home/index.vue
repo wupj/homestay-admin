@@ -10,9 +10,14 @@
         <VisitsTrend />
       </div>
     </div>
-    <div class="flex mt-4">
-      <div class="flex-left"></div>
-      <div class="flex-right"></div>
+    <div class="flex flex-row mt-4">
+      <div class="flex-left flex flex-row grid-item mr-2">
+        <UserProfile class="w-full" />
+      </div>
+      <div class="flex-right flex flex-row grid-item ml-2">
+        <OrderRank class="grid-item mr-2" />
+        <SalesRank class="grid-item ml-2" />
+      </div>
     </div>
   </div>
 </template>
@@ -22,6 +27,9 @@ import Overview from './widgets/overview'
 import OrderStatus from './widgets/order-status'
 import CapitalIncome from './widgets/capital-income'
 import VisitsTrend from './widgets/visits-trend'
+import UserProfile from './widgets/user-profile'
+import OrderRank from './widgets/order-rank'
+import SalesRank from './widgets/sales-rank'
 
 </script>
 

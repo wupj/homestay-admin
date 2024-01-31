@@ -130,6 +130,7 @@ declare module 'vue' {
     CascadeSelect: typeof import('./node_modules/primevue/cascadeselect/CascadeSelect.vue')['default']
     CascadeSelectSub: typeof import('./node_modules/primevue/cascadeselect/CascadeSelectSub.vue')['default']
     Chart: typeof import('./node_modules/primevue/chart/Chart.vue')['default']
+    Charts: typeof import('./src/components/basic/charts/index.vue')['default']
     Check: typeof import('./node_modules/primevue/icons/check/index.vue')['default']
     Checkbox: typeof import('./node_modules/primevue/checkbox/Checkbox.vue')['default']
     Chevrondown: typeof import('./node_modules/primevue/icons/chevrondown/index.vue')['default']
