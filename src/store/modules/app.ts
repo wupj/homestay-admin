@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { RouteRecordRaw } from 'vue-router'
 import { cloneDeep } from 'lodash'
 import router from '@/router'
+import useTheme from '@/hooks/useTheme'
 import { getMenus } from '@/api'
 import { generateRoute } from '@/utils'
 
@@ -10,6 +11,7 @@ const useAppStore = defineStore('app', {
     return {
       menus: [],
       routes: [],
+      theme: useTheme().theme,
     }
   },
   actions: {

@@ -12,7 +12,6 @@ import 'virtual:svg-icons-register'
 
 import 'normalize.css/normalize.css'
 import '@/styles/index.scss'
-import 'primevue/resources/themes/lara-light-purple/theme.css'
 
 import App from './App.vue'
 

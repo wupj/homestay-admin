@@ -2,6 +2,7 @@
 <div class="layout-wrapper flex flex-row">
   <sidebar />
   <div class="layout-main-container flex-1">
+    <Topbar />
     <div class="layout-main p-3">
       <router-view></router-view>
     </div>
@@ -13,6 +14,7 @@
 import { ref } from 'vue'
 
 import Sidebar from './sidebar'
+import Topbar from './topbar'
 </script>
 
 <style lang="scss" scoped>

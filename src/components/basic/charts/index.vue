@@ -3,6 +3,7 @@
 </template>
 
 <script lang="ts" setup>
+  import useTheme from '@/hooks/useTheme'
   import VChart from 'vue-echarts'
   import { use } from 'echarts/core'
   import { CanvasRenderer } from 'echarts/renderers'
@@ -31,11 +32,9 @@
       type: Object,
       required: true,
     },
-    theme: {
-      type: String,
-      default: 'light',
-    },
   })
+
+  const { theme } = useTheme()
 </script>
 
 <style lang="scss" scoped></style>
