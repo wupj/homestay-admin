@@ -6,6 +6,7 @@ import ToastService from 'primevue/toastservice'
 import ConfirmationService from 'primevue/confirmationservice'
 import router from '@/router'
 import store from '@/store'
+import i18n from '@/locale'
 
 import '@/utils/request'
 import 'virtual:svg-icons-register'
@@ -25,4 +26,5 @@ app.use(ToastService)
 app.use(ConfirmationService)
 app.use(router)
 app.use(store)
+app.use(i18n)
 app.mount('#app')

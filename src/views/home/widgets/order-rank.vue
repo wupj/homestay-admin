@@ -1,13 +1,13 @@
 <template>
   <Card>
     <template #content>
-      <div class="card-title">订单量排行榜</div>
+      <div class="card-title">{{ $t('home.orderRank') }}</div>
       <div class="relative w-full h-20rem mt-2">
         <div class="w-full h-full">
           <div class="rank-title flex h-2rem align-items-center font-semibold">
-            <span class="rank-index w-5rem">排行</span>
-            <span class="rank-name flex-1 text-center">民宿名称</span>
-            <span class="rank-value flex-1 text-center">订单量</span>
+            <span class="rank-index w-5rem">{{ $t('home.rank') }}</span>
+            <span class="rank-name flex-1 text-center">{{ $t('home.homestayName') }}</span>
+            <span class="rank-value flex-1 text-center">{{ $t('home.orderVolume') }}</span>
           </div>
           <div class="rank-content">
             <div

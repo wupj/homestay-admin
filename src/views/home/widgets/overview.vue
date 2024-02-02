@@ -1,7 +1,7 @@
 <template>
   <Card class="overview-card">
     <template #content>
-      <div class="card-title">经营概况</div>
+      <div class="card-title">{{ $t('home.businessOverview') }}</div>
       <div class="relative flex justify-content-around align-items-center mt-4">
         <div
           class="
@@ -31,35 +31,37 @@
 
 <script lang="ts" setup>
   import { onBeforeMount, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import useLoading from '@/hooks/useLoading'
   import { toFixed } from '@/utils'
   import { getManageProfile } from '@/api'
 
+  const { t } = useI18n()
   const [loading, setLoading] = useLoading(false)
   const profileList = ref([
     {
       key: 'homestayTotal',
-      label: '民宿总数',
+      label: t('home.homestayTotal'),
     },
     {
       key: 'todayVisitor',
       ratio: 'visitorRatio',
-      label: '今日访问量',
+      label: t('home.todayVisitor'),
     },
     {
       key: 'todaySales',
       ratio: 'salesRatio',
-      label: '今日销售额',
+      label: t('home.todaySales'),
     },
     {
       key: 'todayOrderVolume',
       ratio: 'orderVolumeRatio',
-      label: '今日订单量',
+      label: t('home.todayOrderVolume'),
     },
     {
       key: 'todayRevenue',
       ratio: 'revenueRatio',
-      label: '今日总收入',
+      label: t('home.todayRevenue'),
     },
   ])
   const profileData = ref({})

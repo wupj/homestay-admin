@@ -26,6 +26,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue'
   import useTheme from '@/hooks/useTheme'
+  import useLocale from '@/hooks/useLocale'
 
   const barItems = ref([
     {
@@ -46,7 +47,10 @@
     changeTheme(theme.value === 'light' ? 'dark' : 'light')
   }
 
-  const changeLanguage = () => {}
+  const { locale, changeLocale } = useLocale()
+  const changeLanguage = () => {
+    changeLocale(locale.value === 'zh-CN' ? 'en-US' : 'zh-CN')
+  }
 
   const handleLogOut = () => {}
 </script>

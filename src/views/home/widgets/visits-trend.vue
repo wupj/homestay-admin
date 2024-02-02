@@ -2,7 +2,7 @@
   <Card>
     <template #content>
       <div class="flex justify-content-between justify-content-center align-items-center">
-        <div class="card-title">访问量趋势</div>
+        <div class="card-title">{{ $t('home.visitsTrend') }}</div>
         <div class="flex flex-row">
           <SelectButton
             class="inline-block mr-4"
@@ -44,18 +44,20 @@
 
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import dayjs from 'dayjs'
   import useLoading from '@/hooks/useLoading'
   import useEcharts from '@/hooks/useEcharts'
   import { getAccessTrend } from '@/api'
 
+  const { t } = useI18n()
   const [loading, setLoading] = useLoading(false)
   const dateType = ref('day')
   const date = ref<any>()
   const dateOptions = ref([
-    { name: '今日', value: 'day' },
-    { name: '本周', value: 'week' },
-    { name: '本月', value: 'month' },
+    { name: t('home.today'), value: 'day' },
+    { name: t('home.week'), value: 'week' },
+    { name: t('home.month'), value: 'month' },
   ])
   const chartData = ref([])
 
@@ -65,7 +67,7 @@
       type: 'area',
       xAxisField: 'time',
       yAxisField: 'pv',
-      legendName: '访问量',
+      legendName: t('home.visits'),
     },
     chartData,
     {

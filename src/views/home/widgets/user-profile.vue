@@ -1,7 +1,7 @@
 <template>
   <Card>
     <template #content>
-      <div class="card-title">用户画像</div>
+      <div class="card-title">{{ $t('home.userProfile') }}</div>
       <div class="relative w-full h-20rem mt-2">
         <Charts class="inline-block w-6" :option="pieOptions" />
         <Charts class="inline-block w-6" :option="barOptions" />
@@ -13,21 +13,23 @@
 
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import useLoading from '@/hooks/useLoading'
   import useEcharts from '@/hooks/useEcharts'
   import { getUserPortrait, getCrowdAgeRatio } from '@/api'
 
+  const { t } = useI18n()
   const [loading, setLoading] = useLoading(false)
   const pieData = ref([])
   const [pieOptions] = useEcharts(
     {
       chartType: 'pie',
       radius: true,
-      unit: '人',
+      unit: t('home.people'),
       group: {
         name: {
-          man: '男性',
-          woman: '女性',
+          man: t('home.man'),
+          woman: t('home.woman'),
         },
       },
     },
@@ -35,7 +37,7 @@
     {
       title: {
         show: true,
-        text: '客户性别占比',
+        text: t('home.customerGenderRatio'),
         left: 'center',
         textStyle: {
           fontSize: 14,
@@ -50,14 +52,14 @@
       type: 'horizontal',
       xAxisField: 'category',
       yAxisField: 'ratio',
-      legendName: '人数',
+      legendName: t('home.peopleNumbers'),
       unit: '%',
     },
     barData,
     {
       title: {
         show: true,
-        text: '人群年龄占比',
+        text: t('home.populationAgeRatio'),
         left: 'center',
         textStyle: {
           fontSize: 14,

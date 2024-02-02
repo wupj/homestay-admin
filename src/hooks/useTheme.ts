@@ -1,4 +1,3 @@
-import { ref } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 import { usePrimeVue } from 'primevue/config'
 

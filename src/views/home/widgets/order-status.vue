@@ -1,7 +1,7 @@
 <template>
   <Card>
     <template #content>
-      <div class="card-title">订单状态占比</div>
+      <div class="card-title">{{ $t('home.orderStatusRatio') }}</div>
       <div class="relative w-full h-20rem mt-2">
         <Charts :option="options" />
         <Loading :loading="loading" />
@@ -12,10 +12,12 @@
 
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import useLoading from '@/hooks/useLoading'
   import useEcharts from '@/hooks/useEcharts'
   import { getOrderStatusRatio } from '@/api'
 
+  const { t } = useI18n()
   const [loading, setLoading] = useLoading(false)
   const chartData = ref([])
   const [options] = useEcharts(
@@ -25,10 +27,10 @@
       unit: '%',
       group: {
         name: {
-          unpaidRatio: '待支付',
-          confirmedRatio: '已确认',
-          beingRefundedRatio: '退款中',
-          refundedRatio: '已退款',
+          unpaidRatio: t('home.toBePaid'),
+          confirmedRatio: t('home.confirmed'),
+          beingRefundedRatio: t('home.refundProgress'),
+          refundedRatio: t('home.refunded'),
         },
       },
     },
