@@ -4,20 +4,34 @@
       <template #content>
         <div class="flex justify-content-start align-items-center">
           <div class="field mr-4">
-            <label class="font-semibold mr-2">民宿名称</label>
-            <InputText type="text" v-model="queryForm.homestayName" placeholder="请输入民宿名称" />
+            <label class="font-semibold mr-2">{{ $t('home.homestayName') }}</label>
+            <InputText
+              type="text"
+              v-model="queryForm.homestayName"
+              :placeholder="$t('order.enterHomestayName')"
+            />
           </div>
           <div class="field mr-4">
-            <label class="font-semibold mr-2">租房类型</label>
+            <label class="font-semibold mr-2">{{ $t('homestay.rentType') }}</label>
             <EnumSelect
               v-model="queryForm.rentType"
               enumType="rentType"
-              placeholder="请选择租房类型"
+              :placeholder="$t('homestay.selectRentType')"
             />
           </div>
           <div class="field">
-            <Button class="mr-2" icon="pi pi-search" label="查询" @click="handleSearch" />
-            <Button icon="pi pi-refresh" severity="warning" label="重置" @click="handleReset" />
+            <Button
+              class="mr-2"
+              icon="pi pi-search"
+              :label="$t('common.query')"
+              @click="handleSearch"
+            />
+            <Button
+              icon="pi pi-refresh"
+              severity="warning"
+              :label="$t('common.reset')"
+              @click="handleReset"
+            />
           </div>
         </div>
       </template>
@@ -39,13 +53,13 @@
             <Button
               icon="pi pi-trash"
               severity="danger"
-              label="删除"
+              :label="$t('common.delete')"
               :disabled="!selectRow.length"
               @click="handleDelete(null)"
             />
           </template>
           <template #right>
-            <Button icon="pi pi-plus" label="添加" @click="handleEdit(null)" />
+            <Button icon="pi pi-plus" :label="$t('common.add')" @click="handleEdit(null)" />
           </template>
         </Table>
       </template>
@@ -58,6 +72,7 @@
 
 <script lang="tsx" setup>
   import { ref, onMounted } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import Toast from 'primevue/toast'
   import ConfirmDialog from 'primevue/confirmdialog'
   import { useToast } from 'primevue/usetoast'
@@ -69,6 +84,7 @@
   import { getEnumLabel } from '@/utils/enums'
   import { exportExcel } from '@/utils'
 
+  const { t } = useI18n()
   const toast = useToast()
   const confirm = useConfirm()
 
@@ -92,17 +108,17 @@
   const tableColumn = ref([
     {
       field: 'homestayName',
-      header: '民宿名称',
+      header: t('home.homestayName'),
       sortable: true,
     },
     {
       field: 'address',
-      header: '地址',
+      header: t('order.address'),
       class: 'w-2',
     },
     {
       field: 'rentType',
-      header: '租房类型',
+      header: t('homestay.rentType'),
       sortable: true,
       render: ({ data }) => {
         return <span>{getEnumLabel('rentType', data.rentType)}</span>
@@ -110,17 +126,17 @@
     },
     {
       field: 'antecedentMoney',
-      header: '押金（元）',
+      header: `${t('home.antecedentMoney')}(${t('home.dollar')})`,
       sortable: true,
     },
     {
       field: 'rent',
-      header: '租金（元）',
+      header: `${t('order.rent')}(${t('home.dollar')})`,
       sortable: true,
     },
     {
       field: 'thumb',
-      header: '缩略图',
+      header: t('homestay.thumb'),
       sortable: true,
       render: ({ data }) => {
         return <Image src={data.thumb} width="50" height="50" preview />
@@ -128,12 +144,12 @@
     },
     {
       field: 'describe',
-      header: '民宿描述',
+      header: t('homestay.homestayDescribe'),
       class: 'w-2',
     },
     {
       field: 'tag',
-      header: '标签',
+      header: t('homestay.tag'),
       class: 'w-1',
       render: ({ data }) => {
         const severity = ['', 'info', 'success', 'warning']
@@ -148,26 +164,26 @@
     },
     {
       field: 'createdBy',
-      header: '创建人',
+      header: t('homestay.creator'),
       sortable: true,
     },
     {
       field: 'isPut',
-      header: '发布',
+      header: t('homestay.release'),
       render: ({ data }) => {
         return <InputSwitch v-model={data.isPut} />
       },
     },
     {
       field: 'operate',
-      header: '操作',
+      header: t('common.operate'),
       render: ({ data }) => {
         return (
           <div>
-            <Button class="p-0" label="编辑" text onClick={() => handleEdit(data)} />
+            <Button class="p-0" label={t('common.edit')} text onClick={() => handleEdit(data)} />
             <Button
               class="p-0 ml-4"
-              label="删除"
+              label={t('common.delete')}
               severity="warning"
               text
               onClick={() => handleDelete(data)}
@@ -226,15 +242,15 @@
   const handleDelete = (row) => {
     console.log(row)
     confirm.require({
-      header: '删除',
-      message: '确认要删除吗?',
-      acceptLabel: '确定',
-      rejectLabel: '取消',
+      header: t('common.delete'),
+      message: t('message.confirmDelete'),
+      acceptLabel: t('common.confirm'),
+      rejectLabel: t('common.cancel'),
       acceptIcon: 'pi pi-check',
       rejectIcon: 'pi pi-times',
       rejectClass: 'p-button-raised p-button-text mr-4',
       accept: () => {
-        toast.add({ severity: 'success', detail: '操作成功', life: 3000 })
+        toast.add({ severity: 'success', detail: t('message.operationSuccessful'), life: 3000 })
         handleSearch()
       },
     })

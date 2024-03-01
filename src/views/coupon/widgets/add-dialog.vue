@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-model:visible="visible"
-    :header="operateType === 'add' ? '新增优惠券' : '编辑优惠券'"
+    :header="operateType === 'add' ? $t('coupon.addCoupon') : $t('coupon.editCoupon')"
     :style="{ width: '40rem' }"
     :draggable="false"
     @hide="handleClose"
@@ -27,7 +27,7 @@
                   name="hasOrderAmount"
                   :value="false"
                 />
-                <label for="hasOrderAmount" class="ml-2">无限制</label>
+                <label for="hasOrderAmount" class="ml-2">{{ $t('coupon.unrestricted') }}</label>
               </div>
               <div class="flex align-items-center">
                 <RadioButton
@@ -37,13 +37,14 @@
                   :value="true"
                 />
                 <label for="hasOrderAmount2" class="ml-2"
-                  >满<InputText
+                  >{{ $t('coupon.over')
+                  }}<InputText
                     class="ml-2 mr-2"
                     type="text"
                     v-model="form.orderAmount"
                     :disabled="!form[item.prop]"
                     :placeholder="item.placeholder"
-                  />可用</label
+                  />{{ $t('coupon.available') }}</label
                 >
               </div>
             </div>
@@ -58,7 +59,7 @@
               optionValue="homestayId"
               optionLabel="homestayName"
               display="chip"
-              filterPlaceholder="请输入民宿名称"
+              :filterPlaceholder="$t('order.enterHomestayName')"
               filter
             />
             <Calendar
@@ -101,14 +102,22 @@
       </form>
     </div>
     <template #footer>
-      <Button class="mr-4" icon="pi pi-times" label="取消" @click="handleClose" text raised />
-      <Button icon="pi pi-check" label="确定" @click="handleSubmit" />
+      <Button
+        class="mr-4"
+        icon="pi pi-times"
+        :label="$t('common.cancel')"
+        @click="handleClose"
+        text
+        raised
+      />
+      <Button icon="pi pi-check" :label="$t('common.confirm')" @click="handleSubmit" />
     </template>
   </Dialog>
 </template>
 
 <script lang="ts" setup>
   import { ref, defineExpose } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useToast } from 'primevue/usetoast'
   import { getHomestayList } from '@/api'
   import { Rules } from 'async-validator'
@@ -117,6 +126,7 @@
 
   const emit = defineEmits(['done'])
 
+  const { t } = useI18n()
   const toast = useToast()
   const [homestayLoading, setHomestayLoading] = useLoading(false)
 
@@ -125,52 +135,52 @@
   const homestayList = ref([])
   const formArr = ref([
     {
-      label: '优惠券名称',
+      label: t('coupon.couponName'),
       prop: 'couponName',
-      placeholder: '请输入优惠券名称',
+      placeholder: t('coupon.enterCouponName'),
       required: true,
     },
     {
-      label: '面值',
+      label: t('coupon.nominalValue'),
       prop: 'nominalValue',
-      placeholder: '请输入面值',
+      placeholder: t('coupon.enterNominalValue'),
       required: true,
     },
     {
-      label: '订单金额',
+      label: t('order.orderAmount'),
       prop: 'hasOrderAmount',
-      placeholder: '请输入订单金额',
+      placeholder: t('coupon.enterOrderAmount'),
       required: true,
     },
     {
-      label: '发放数量',
+      label: t('coupon.releasedQuantity'),
       prop: 'releasedQuantity',
-      placeholder: '请输入发放数量',
+      placeholder: t('coupon.enterReleasedQuantity'),
       required: true,
     },
     {
-      label: '适用民宿',
+      label: t('coupon.applicableHomestay'),
       prop: 'availableHomestay',
-      placeholder: '请选择适用民宿',
+      placeholder: t('coupon.selectApplicableHomestay'),
       required: false,
     },
     {
-      label: '有效期',
+      label: t('coupon.expiryDate'),
       prop: 'time',
-      placeholder: '请选择有效期',
+      placeholder: t('coupon.selectExpiryDate'),
       required: true,
     },
     {
-      label: '领取方式',
+      label: t('coupon.pickupMode'),
       prop: 'pickupMode',
       enumType: 'pickupMode',
-      placeholder: '请选择领取方式',
+      placeholder: t('coupon.selectPickupMode'),
       required: true,
     },
     {
-      label: '补充说明',
+      label: t('order.moreInfo'),
       prop: 'moreInfo',
-      placeholder: '请输入补充说明',
+      placeholder: t('coupon.enterMoreInfo'),
       required: false,
     },
   ])
@@ -188,32 +198,32 @@
   const rules: Rules = {
     couponName: {
       required: true,
-      message: '请输入优惠券名称',
+      message: t('coupon.enterCouponName'),
     },
     nominalValue: {
       required: true,
-      message: '请输入面值',
+      message: t('coupon.enterNominalValue'),
     },
     hasOrderAmount: {
       required: true,
       validator: (rule, value, callback) => {
         if (value && form.value.orderAmount.trim() === '') {
-          callback(new Error('请输入订单金额'))
+          callback(new Error(t('coupon.enterOrderAmount')))
         }
         callback()
-      }
+      },
     },
     releasedQuantity: {
       required: true,
-      message: '请输入发放数量',
+      message: t('coupon.enterReleasedQuantity'),
     },
     time: {
       required: true,
-      message: '请选择有效期',
+      message: t('coupon.selectExpiryDate'),
     },
     pickupMode: {
       required: true,
-      message: '请选择领取方式',
+      message: t('coupon.selectPickupMode'),
     },
   }
 
@@ -264,7 +274,7 @@
     if (pass) {
       toast.add({
         severity: 'success',
-        detail: '操作成功',
+        detail: t('message.operationSuccessful'),
         life: 3000,
       })
       handleClose()

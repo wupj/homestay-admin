@@ -8,7 +8,6 @@ const useEcharts = (baseOpt: any, baseData: any, extraOpt: any = {}) => {
 
   const setOptions = (value: EChartsOption) => {
     options.value = value
-    console.log('options', value)
   }
 
   watch(

@@ -4,31 +4,45 @@
       <template #content>
         <div class="flex justify-content-start align-items-center">
           <div class="field mr-4">
-            <label class="font-semibold mr-2">优惠券名称</label>
-            <InputText type="text" v-model="queryForm.couponName" placeholder="请输入优惠券名称" />
-          </div>
-          <div class="field mr-4">
-            <label class="font-semibold mr-2">领取方式</label>
-            <EnumSelect
-              v-model="queryForm.pickupMode"
-              enumType="pickupMode"
-              placeholder="请选择领取方式"
+            <label class="font-semibold mr-2">{{ $t('coupon.couponName') }}</label>
+            <InputText
+              type="text"
+              v-model="queryForm.couponName"
+              :placeholder="$t('coupon.enterCouponName')"
             />
           </div>
           <div class="field mr-4">
-            <label class="font-semibold mr-2">时间段</label>
+            <label class="font-semibold mr-2">{{ $t('coupon.pickupMode') }}</label>
+            <EnumSelect
+              v-model="queryForm.pickupMode"
+              enumType="pickupMode"
+              :placeholder="$t('coupon.selectPickupMode')"
+            />
+          </div>
+          <div class="field mr-4">
+            <label class="font-semibold mr-2">{{ $t('coupon.timePeriod') }}</label>
             <Calendar
               v-model="queryForm.date"
               selectionMode="range"
               dateFormat="yy-mm-dd"
-              placeholder="请选择时间段"
+              :placeholder="$t('coupon.selectTimePeriod')"
               :manualInput="false"
               showIcon
             />
           </div>
           <div class="field">
-            <Button class="mr-2" icon="pi pi-search" label="查询" @click="handleSearch" />
-            <Button icon="pi pi-refresh" severity="warning" label="重置" @click="handleReset" />
+            <Button
+              class="mr-2"
+              icon="pi pi-search"
+              :label="$t('common.query')"
+              @click="handleSearch"
+            />
+            <Button
+              icon="pi pi-refresh"
+              severity="warning"
+              :label="$t('common.reset')"
+              @click="handleReset"
+            />
           </div>
         </div>
       </template>
@@ -50,13 +64,13 @@
             <Button
               icon="pi pi-trash"
               severity="danger"
-              label="删除"
+              :label="$t('common.delete')"
               :disabled="!selectRow.length"
               @click="handleDelete(null)"
             />
           </template>
           <template #right>
-            <Button icon="pi pi-plus" label="添加" @click="handleEdit(null)" />
+            <Button icon="pi pi-plus" :label="$t('common.add')" @click="handleEdit(null)" />
           </template>
         </Table>
       </template>
@@ -69,6 +83,7 @@
 
 <script lang="tsx" setup>
   import { ref, onMounted } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import Toast from 'primevue/toast'
   import ConfirmDialog from 'primevue/confirmdialog'
   import { useToast } from 'primevue/usetoast'
@@ -80,6 +95,7 @@
   import { getEnumLabel, pickupMode } from '@/utils/enums'
   import { exportExcel } from '@/utils'
 
+  const { t } = useI18n()
   const toast = useToast()
   const confirm = useConfirm()
 
@@ -106,28 +122,34 @@
   const tableColumn = ref([
     {
       field: 'couponName',
-      header: '优惠券名称',
+      header: t('coupon.couponName'),
       sortable: true,
     },
     {
       field: 'nominalValue',
-      header: '面值',
+      header: t('coupon.nominalValue'),
       sortable: true,
     },
     {
       field: 'orderAmount',
-      header: '订单金额',
+      header: t('order.orderAmount'),
       sortable: true,
       render: ({ data }) => {
         if (!data.orderAmount) {
-          return <span>不限制</span>
+          return <span>{t('coupon.unrestricted')}</span>
         }
-        return <span>满{data.orderAmount}元</span>
+        return (
+          <span>
+            {t('coupon.over')}
+            {data.orderAmount}
+            {t('home.dollar')}
+          </span>
+        )
       },
     },
     {
       field: 'pickupMode',
-      header: '领取方式',
+      header: t('coupon.pickupMode'),
       sortable: true,
       render: ({ data }) => {
         return <span>{getEnumLabel('pickupMode', data.pickupMode)}</span>
@@ -135,39 +157,39 @@
     },
     {
       field: 'releasedQuantity',
-      header: '发放数量',
+      header: t('coupon.releasedQuantity'),
       sortable: true,
     },
     {
       field: 'availableHomestay',
-      header: '可用民宿',
+      header: t('coupon.availableHomestay'),
       sortable: true,
     },
     {
       field: 'effectiveTime',
-      header: '生效时间',
+      header: t('coupon.effectiveTime'),
       sortable: true,
     },
     {
       field: 'failureTime',
-      header: '失效时间',
+      header: t('coupon.failureTime'),
       sortable: true,
     },
     {
       field: 'createdBy',
-      header: '创建人',
+      header: t('homestay.creator'),
       sortable: true,
     },
     {
       field: 'operate',
-      header: '操作',
+      header: t('common.operate'),
       render: ({ data }) => {
         return (
           <div>
-            <Button class="p-0" label="编辑" text onClick={() => handleEdit(data)} />
+            <Button class="p-0" label={t('common.edit')} text onClick={() => handleEdit(data)} />
             <Button
               class="p-0 ml-4"
-              label="删除"
+              label={t('common.delete')}
               severity="warning"
               text
               onClick={() => handleDelete(data)}
@@ -232,15 +254,15 @@
   const handleDelete = (row) => {
     console.log(row)
     confirm.require({
-      header: '删除',
-      message: '确认要删除吗?',
-      acceptLabel: '确定',
-      rejectLabel: '取消',
+      header: t('common.delete'),
+      message: t('message.confirmDelete'),
+      acceptLabel: t('common.confirm'),
+      rejectLabel: t('common.cancel'),
       acceptIcon: 'pi pi-check',
       rejectIcon: 'pi pi-times',
       rejectClass: 'p-button-raised p-button-text mr-4',
       accept: () => {
-        toast.add({ severity: 'success', detail: '操作成功', life: 3000 })
+        toast.add({ severity: 'success', detail: t('message.operationSuccessful'), life: 3000 })
         handleSearch()
       },
     })

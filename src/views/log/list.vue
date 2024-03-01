@@ -4,7 +4,7 @@
       <template #content>
         <div class="flex justify-content-start align-items-center">
           <div class="field mr-4">
-            <label class="font-semibold mr-2">操作账号</label>
+            <label class="font-semibold mr-2">{{ $t('log.operateAccount') }}</label>
             <Dropdown
               class="w-12rem"
               v-model="queryForm.userName"
@@ -12,32 +12,50 @@
               :virtualScrollerOptions="{ itemSize: 38 }"
               optionLabel="accountName"
               optionValue="accountName"
-              placeholder="请选择操作账号"
+              :placeholder="$t('log.selectOperateAccount')"
             />
           </div>
           <div class="field mr-4">
-            <label class="font-semibold mr-2">操作模块</label>
-            <InputText type="text" v-model="queryForm.operateModule" placeholder="请输入操作模块" />
+            <label class="font-semibold mr-2">{{ $t('log.operateModule') }}</label>
+            <InputText
+              type="text"
+              v-model="queryForm.operateModule"
+              :placeholder="$t('log.enterOperateModule')"
+            />
           </div>
           <div class="field mr-4">
-            <label class="font-semibold mr-2">ip地址</label>
-            <InputText type="text" v-model="queryForm.ipAddress" placeholder="请输入ip地址" />
+            <label class="font-semibold mr-2">{{ $t('log.operateAccount') }}</label>
+            <InputText
+              type="text"
+              v-model="queryForm.ipAddress"
+              :placeholder="$t('log.enterIpAddress')"
+            />
           </div>
 
           <div class="field mr-4">
-            <label class="font-semibold mr-2">操作时间</label>
+            <label class="font-semibold mr-2">{{ $t('log.operateTime') }}</label>
             <Calendar
               v-model="queryForm.date"
               selectionMode="range"
               dateFormat="yy-mm-dd "
-              placeholder="请选择时间段"
+              :placeholder="$t('coupon.selectTimePeriod')"
               :manualInput="false"
               showIcon
             />
           </div>
           <div class="field">
-            <Button class="mr-2" icon="pi pi-search" label="查询" @click="handleSearch" />
-            <Button icon="pi pi-refresh" severity="warning" label="重置" @click="handleReset" />
+            <Button
+              class="mr-2"
+              icon="pi pi-search"
+              :label="$t('common.query')"
+              @click="handleSearch"
+            />
+            <Button
+              icon="pi pi-refresh"
+              severity="warning"
+              :label="$t('common.reset')"
+              @click="handleReset"
+            />
           </div>
         </div>
       </template>
@@ -61,9 +79,12 @@
 
 <script lang="tsx" setup>
   import { ref, onMounted } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import Table from '@/components/basic/table'
   import { getUserList, getLogLost } from '@/api'
   import { exportExcel } from '@/utils'
+
+  const { t } = useI18n()
 
   const queryForm = ref({
     userName: '',
@@ -90,27 +111,27 @@
   const tableColumn = ref([
     {
       field: 'accountName',
-      header: '操作账号',
+      header: t('log.operateAccount'),
       sortable: true,
     },
     {
       field: 'operateModule',
-      header: '操作模块',
+      header: t('log.operateModule'),
       sortable: true,
     },
     {
       field: 'operateRecord',
-      header: '操作记录',
+      header: t('log.operateRecord'),
       class: 'w-5',
     },
     {
       field: 'ipAddress',
-      header: 'ip地址',
+      header: t('log.ipAddress'),
       sortable: true,
     },
     {
       field: 'operateTime',
-      header: '操作时间',
+      header: t('log.operateTime'),
       sortable: true,
     },
   ])

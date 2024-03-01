@@ -5,15 +5,19 @@
         <div class="logo-box flex flex-row align-items-center justify-content-between">
           <div class="image"></div>
           <div class="form-box flex-1 ml-4">
-            <div class="title text-center text-4xl">欢迎登录</div>
+            <div class="title text-center text-4xl">{{ $t('login.welcomeLogin') }}</div>
             <TabView class="mt-4" :active-index="activeIndex" @tab-change="changeTab">
-              <TabPanel header="账号登录">
+              <TabPanel :header="$t('login.accountLogin')">
                 <form class="flex flex-column gap-2">
                   <div class="form-field w-full flex justify-content-start align-items-center">
                     <div class="flex-1 relative">
                       <div class="p-input-icon-left w-full">
                         <i class="pi pi-user" />
-                        <InputText class="w-full" v-model="form.name" placeholder="请输入账号" />
+                        <InputText
+                          class="w-full"
+                          v-model="form.name"
+                          :placeholder="$t('user.enterAccount')"
+                        />
                       </div>
                       <small
                         class="block p-error text-base"
@@ -29,7 +33,7 @@
                         <InputText
                           class="w-full"
                           v-model="form.password"
-                          placeholder="请输入密码"
+                          :placeholder="$t('user.enterPassword')"
                         />
                       </div>
                       <small
@@ -41,7 +45,11 @@
                   </div>
                   <div class="form-field w-full flex justify-content-start align-items-center">
                     <div class="flex align-items-center w-fullrelative">
-                      <InputText class="w-full" v-model="form.captcha" placeholder="请输入验证码" />
+                      <InputText
+                        class="w-full"
+                        v-model="form.captcha"
+                        :placeholder="$t('login.enterVerificationCode')"
+                      />
                       <Captcha
                         class="ml-2"
                         :code="captcha"
@@ -58,16 +66,22 @@
                   <div class="form-field w-full flex justify-content-start align-items-center">
                     <div class="flex align-items-center">
                       <Checkbox v-model="form.notLogin" inputId="not-login" :binary="true" />
-                      <label class="ml-2 cursor-pointer" for="not-login">1个月内免登录</label>
+                      <label class="ml-2 cursor-pointer" for="not-login">{{
+                        $t('login.noLoginRequiredMonth')
+                      }}</label>
                     </div>
                   </div>
-                  <Button label="登录" :loading="submitLoading" @click="handleSubmit" />
+                  <Button
+                    :label="$t('login.login')"
+                    :loading="submitLoading"
+                    @click="handleSubmit"
+                  />
                 </form>
               </TabPanel>
-              <TabPanel header="扫码登录">
+              <TabPanel :header="$t('login.scanCodeLogin')">
                 <div class="flex flex-column justify-content-center align-items-center w-full">
                   <img class="w-6 h-6" :src="qrcode" alt="QR Code" />
-                  <div class="text-400">请使用共享民宿APP扫码登录</div>
+                  <div class="text-400">{{ $t('login.useSharedHomestayAppScanLogin') }}</div>
                 </div>
               </TabPanel>
             </TabView>
@@ -82,6 +96,7 @@
 <script lang="ts" setup>
   import { ref, onBeforeMount } from 'vue'
   import { useRouter } from 'vue-router'
+  import { useI18n } from 'vue-i18n'
   import Toast from 'primevue/toast'
   import { useToast } from 'primevue/usetoast'
   import Captcha from '@/components/basic/captcha'
@@ -94,6 +109,7 @@
   import { getCaptcha, login } from '@/api'
 
   const router = useRouter()
+  const { t } = useI18n()
   const toast = useToast()
   const qrcode = useQRCode('text-to-encode')
   const userStore = useUserStore()
@@ -110,20 +126,20 @@
   const rules: Rules = {
     name: {
       required: true,
-      message: '请输入账号',
+      message: t('user.enterAccount'),
     },
     password: {
       required: true,
-      message: '请输入密码',
+      message: t('user.enterPassword'),
     },
     captcha: {
       required: true,
       validator: (rule, value, callback) => {
         if (!value.trim()) {
-          callback(new Error('请输入验证码'))
+          callback(new Error(t('login.enterVerificationCode')))
         }
         if (value.toLocaleUpperCase() !== captcha.value.toLocaleUpperCase()) {
-          callback(new Error('验证码错误'))
+          callback(new Error(t('login.verificationCodeError')))
         }
         callback()
       },

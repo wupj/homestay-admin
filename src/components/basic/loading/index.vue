@@ -19,6 +19,8 @@
 </template>
 
 <script lang="ts" setup>
+  import i18n from '@/locale'
+
   defineProps({
     loading: {
       type: Boolean,
@@ -26,7 +28,7 @@
     },
     loadText: {
       type: String,
-      default: '请稍后...',
+      default: i18n.global.t('common.pleaseWait'),
     },
   })
 </script>

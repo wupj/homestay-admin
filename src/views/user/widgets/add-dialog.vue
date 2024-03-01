@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-model:visible="visible"
-    :header="operateType === 'add' ? '新增用户' : '编辑用户'"
+    :header="operateType === 'add' ? $t('user.addUser') : $t('user.editUser')"
     :style="{ width: '40rem' }"
     :draggable="false"
     @hide="handleClose"
@@ -27,7 +27,7 @@
                   name="state"
                   :value="true"
                 />
-                <label for="state1" class="ml-2">启用</label>
+                <label for="state1" class="ml-2">{{ $t('user.enable') }}</label>
               </div>
               <div class="flex align-items-center ml-5">
                 <RadioButton
@@ -36,7 +36,7 @@
                   name="state"
                   :value="false"
                 />
-                <label for="state2" class="ml-2">禁用</label>
+                <label for="state2" class="ml-2">{{ $t('user.disabled') }}</label>
               </div>
             </div>
             <Dropdown
@@ -65,22 +65,31 @@
       </form>
     </div>
     <template #footer>
-      <Button class="mr-4" icon="pi pi-times" label="取消" @click="handleClose" text raised />
-      <Button icon="pi pi-check" label="确定" @click="handleSubmit" />
+      <Button
+        class="mr-4"
+        icon="pi pi-times"
+        :label="$t('common.cancel')"
+        @click="handleClose"
+        text
+        raised
+      />
+      <Button icon="pi pi-check" :label="$t('common.confirm')" @click="handleSubmit" />
     </template>
   </Dialog>
 </template>
 
 <script lang="ts" setup>
   import { ref, defineExpose } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useToast } from 'primevue/usetoast'
   import { getRoleList } from '@/api'
   import { Rules } from 'async-validator'
   import useValidator from '@/hooks/useValidator'
-  import useLoading from "@/hooks/useLoading";
+  import useLoading from '@/hooks/useLoading'
 
   const emit = defineEmits(['done'])
 
+  const { t } = useI18n()
   const toast = useToast()
   const [roleLoading, setRoleLoading] = useLoading(false)
 
@@ -89,50 +98,50 @@
   const roleList = ref([])
   const formArr = ref([
     {
-      label: '账号',
+      label: t('user.account'),
       prop: 'accountName',
-      placeholder: '请输入账号',
+      placeholder: t('user.enterAccount'),
       required: true,
     },
     {
-      label: '真实姓名',
+      label: t('user.realName'),
       prop: 'userName',
-      placeholder: '请输入真实姓名',
+      placeholder: t('user.enterRealName'),
       required: true,
     },
     {
-      label: '密码',
+      label: t('user.password'),
       prop: 'password',
-      placeholder: '请输入密码',
+      placeholder: t('user.enterPassword'),
       required: true,
     },
     {
-      label: '确认密码',
+      label: t('user.confirmPassword'),
       prop: 'confirmPassword',
-      placeholder: '请再次输入密码',
+      placeholder: t('user.enterPasswordAgain'),
       required: true,
     },
     {
-      label: '手机号码',
+      label: t('order.phone'),
       prop: 'phone',
-      placeholder: '请输入手机号码',
+      placeholder: t('order.enterPhone'),
       required: true,
     },
     {
-      label: '邮箱',
+      label: t('user.email'),
       prop: 'email',
-      placeholder: '请输入邮箱',
+      placeholder: t('user.enterEmail'),
       required: false,
     },
     {
-      label: '状态',
+      label: t('user.state'),
       prop: 'state',
       required: true,
     },
     {
-      label: '角色',
+      label: t('user.role'),
       prop: 'roleId',
-      placeholder: '请选择角色',
+      placeholder: t('user.selectRole'),
       required: false,
     },
   ])
@@ -149,27 +158,27 @@
   const rules: Rules = {
     accountName: {
       required: true,
-      message: '请输入账号',
+      message: t('user.enterAccount'),
     },
     userName: {
       required: true,
-      message: '请输入真实姓名',
+      message: t('user.enterRealName'),
     },
     password: {
       required: true,
-      message: '请输入密码',
+      message: t('user.enterPassword'),
     },
     confirmPassword: {
       required: true,
-      message: '请再次输入密码',
+      message: t('user.enterPasswordAgain'),
     },
     phone: {
       required: true,
-      message: '请输入手机号码',
+      message: t('order.enterPhone'),
     },
     state: {
       required: true,
-      message: '请选择状态',
+      message: t('user.selectState'),
     },
   }
 
@@ -214,7 +223,7 @@
     if (pass) {
       toast.add({
         severity: 'success',
-        detail: '操作成功',
+        detail: t('message.operationSuccessful'),
         life: 3000,
       })
       handleClose()

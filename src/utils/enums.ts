@@ -1,15 +1,17 @@
+import i18n from '@/locale'
+
 // 支付方式
 export const paymentMode = [
   {
-    label: '微信支付',
+    label: i18n.global.t('enums.weChatPayment'),
     value: 0,
   },
   {
-    label: '支付宝支付',
+    label: i18n.global.t('enums.alipayPayment'),
     value: 1,
   },
   {
-    label: '网银支付',
+    label: i18n.global.t('enums.eCurrencyPayment'),
     value: 2,
   },
 ]
@@ -17,19 +19,19 @@ export const paymentMode = [
 // 租房类型
 export const rentType = [
   {
-    label: '钟点房',
+    label: i18n.global.t('enums.clockRoom'),
     value: 0,
   },
   {
-    label: '日租',
+    label: i18n.global.t('enums.dailyRent'),
     value: 1,
   },
   {
-    label: '月租',
+    label: i18n.global.t('enums.monthlyRent'),
     value: 2,
   },
   {
-    label: '年租',
+    label: i18n.global.t('enums.annualRent'),
     value: 3,
   },
 ]
@@ -37,19 +39,19 @@ export const rentType = [
 // 民宿标签
 export const homestayTag = [
   {
-    label: '旅游',
+    label: i18n.global.t('enums.travel'),
     value: 0,
   },
   {
-    label: '居家',
+    label: i18n.global.t('enums.living'),
     value: 1,
   },
   {
-    label: '放松',
+    label: i18n.global.t('enums.relax'),
     value: 2,
   },
   {
-    label: '休闲',
+    label: i18n.global.t('enums.leisure'),
     value: 3,
   },
 ]
@@ -57,15 +59,15 @@ export const homestayTag = [
 // 优惠券领取方式
 export const pickupMode = [
   {
-    label: '新注册用户',
+    label: i18n.global.t('enums.NewRegisteredUser'),
     value: 0,
   },
   {
-    label: '好友邀请',
+    label: i18n.global.t('enums.friendInvitation'),
     value: 1,
   },
   {
-    label: '限时领取',
+    label: i18n.global.t('enums.limitedTimeCollection'),
     value: 2,
   },
 ]
@@ -73,31 +75,31 @@ export const pickupMode = [
 // 订单状态
 export const orderState = [
   {
-    label: '待支付',
+    label: i18n.global.t('home.toBePaid'),
     value: 1,
   },
   {
-    label: '已确认',
+    label: i18n.global.t('home.confirmed'),
     value: 2,
   },
   {
-    label: '已入住',
+    label: i18n.global.t('enums.checkedIn'),
     value: 3,
   },
   {
-    label: '退款中',
+    label: i18n.global.t('home.refundProgress'),
     value: 4,
   },
   {
-    label: '待评价',
+    label: i18n.global.t('enums.toBeEvaluated'),
     value: 5,
   },
   {
-    label: '已完成',
+    label: i18n.global.t('enums.completed'),
     value: 6,
   },
   {
-    label: '已取消',
+    label: i18n.global.t('enums.canceled'),
     value: 7,
   },
 ]
@@ -105,19 +107,19 @@ export const orderState = [
 // 下单方式
 export const orderMethod = [
   {
-    label: 'APP下单',
+    label: i18n.global.t('enums.appOrder'),
     value: 0,
   },
   {
-    label: '小程序下单',
+    label: i18n.global.t('enums.mpOrder'),
     value: 1,
   },
   {
-    label: 'H5网站下单',
+    label: i18n.global.t('enums.h5Order'),
     value: 2,
   },
   {
-    label: 'Web网站下单',
+    label: i18n.global.t('enums.webOrder'),
     value: 3,
   },
 ]
@@ -137,7 +139,7 @@ export const getEnumLabel = (enumType, value: number) => {
 
 export const getEnum = (enumType: string, showAll?: boolean, filterValue?: Array<number>) => {
   const list = enums[enumType]
-  showAll && list?.unshift({ label: '全部', value: undefined })
+  showAll && list?.unshift({ label: i18n.global.t('common.all'), value: undefined })
   return list.filter((o) => !filterValue?.includes(o.value))
 }
 

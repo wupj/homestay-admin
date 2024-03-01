@@ -4,38 +4,56 @@
       <template #content>
         <div class="flex justify-content-start align-items-center">
           <div class="field mr-4">
-            <label class="font-semibold mr-2">账号</label>
-            <InputText type="text" v-model="queryForm.accountName" placeholder="请输入账号" />
+            <label class="font-semibold mr-2">{{ $t('user.account') }}</label>
+            <InputText
+              type="text"
+              v-model="queryForm.accountName"
+              :placeholder="$t('user.enterAccount')"
+            />
           </div>
           <div class="field mr-4">
-            <label class="font-semibold mr-2">真实姓名</label>
-            <InputText type="text" v-model="queryForm.userName" placeholder="请输入真实姓名" />
+            <label class="font-semibold mr-2">{{ $t('user.realName') }}</label>
+            <InputText
+              type="text"
+              v-model="queryForm.userName"
+              :placeholder="$t('user.enterRealName')"
+            />
           </div>
           <div class="field mr-4">
-            <label class="font-semibold mr-2">状态</label>
+            <label class="font-semibold mr-2">{{ $t('user.state') }}</label>
             <Dropdown
               class="w-12rem"
               v-model="queryForm.state"
               :options="stateOpt"
               optionLabel="label"
               optionValue="value"
-              placeholder="请选择状态"
+              :placeholder="$t('user.selectState')"
             />
           </div>
           <div class="field mr-4">
-            <label class="font-semibold mr-2">创建时间</label>
+            <label class="font-semibold mr-2">{{ $t('role.createTime') }}</label>
             <Calendar
               v-model="queryForm.date"
               selectionMode="range"
               dateFormat="yy-mm-dd "
-              placeholder="请选择时间段"
+              :placeholder="$t('coupon.selectTimePeriod')"
               :manualInput="false"
               showIcon
             />
           </div>
           <div class="field">
-            <Button class="mr-2" icon="pi pi-search" label="查询" @click="handleSearch" />
-            <Button icon="pi pi-refresh" severity="warning" label="重置" @click="handleReset" />
+            <Button
+              class="mr-2"
+              icon="pi pi-search"
+              :label="$t('common.query')"
+              @click="handleSearch"
+            />
+            <Button
+              icon="pi pi-refresh"
+              severity="warning"
+              :label="$t('common.reset')"
+              @click="handleReset"
+            />
           </div>
         </div>
       </template>
@@ -57,13 +75,17 @@
             <Button
               icon="pi pi-trash"
               severity="danger"
-              label="删除"
+              :label="$t('common.delete')"
               :disabled="!selectRow.length"
               @click="handleDelete(null)"
             />
           </template>
           <template #right>
-            <Button icon="pi pi-plus" label="添加" @click="handleEdit(null)" /> </template
+            <Button
+              icon="pi pi-plus"
+              :label="$t('common.add')"
+              @click="handleEdit(null)"
+            /> </template
         ></Table>
       </template>
     </Card>
@@ -75,6 +97,7 @@
 
 <script lang="tsx" setup>
   import { ref, onMounted } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import Toast from 'primevue/toast'
   import ConfirmDialog from 'primevue/confirmdialog'
   import { useToast } from 'primevue/usetoast'
@@ -84,6 +107,7 @@
   import { getUserList } from '@/api'
   import { exportExcel } from '@/utils'
 
+  const { t } = useI18n()
   const toast = useToast()
   const confirm = useConfirm()
 
@@ -110,57 +134,57 @@
   })
   const stateOpt = ref([
     {
-      label: '启用',
+      label: t('user.enable'),
       value: true,
     },
     {
-      label: '禁用',
+      label: t('user.disabled'),
       value: false,
     },
   ])
   const tableColumn = ref([
     {
       field: 'accountName',
-      header: '账号',
+      header: t('user.account'),
       sortable: true,
     },
     {
       field: 'userName',
-      header: '真实姓名',
+      header: t('user.realName'),
       sortable: true,
     },
     {
       field: 'phone',
-      header: '手机号码',
+      header: t('order.phone'),
       sortable: true,
     },
     {
       field: 'email',
-      header: '邮箱',
+      header: t('user.email'),
       sortable: true,
     },
     {
       field: 'createdTime',
-      header: '创建时间',
+      header: t('role.createTime'),
       sortable: true,
     },
     {
       field: 'state',
-      header: '状态',
+      header: t('user.state'),
       render: ({ data }) => {
         return <InputSwitch v-model={data.state} />
       },
     },
     {
       field: 'operate',
-      header: '操作',
+      header: t('common.operate'),
       render: ({ data }) => {
         return (
           <div>
-            <Button class="p-0" label="编辑" text onClick={() => handleEdit(data)} />
+            <Button class="p-0" label={t('common.edit')} text onClick={() => handleEdit(data)} />
             <Button
               class="p-0 ml-4"
-              label="删除"
+              label={t('common.delete')}
               severity="warning"
               text
               onClick={() => handleDelete(data)}
@@ -225,15 +249,15 @@
   const handleDelete = (row) => {
     console.log(row)
     confirm.require({
-      header: '删除',
-      message: '确认要删除吗?',
-      acceptLabel: '确定',
-      rejectLabel: '取消',
+      header: t('common.delete'),
+      message: t('message.confirmDelete'),
+      acceptLabel: t('common.confirm'),
+      rejectLabel: t('common.cancel'),
       acceptIcon: 'pi pi-check',
       rejectIcon: 'pi pi-times',
       rejectClass: 'p-button-raised p-button-text mr-4',
       accept: () => {
-        toast.add({ severity: 'success', detail: '操作成功', life: 3000 })
+        toast.add({ severity: 'success', detail: t('message.operationSuccessful'), life: 3000 })
         handleSearch()
       },
     })

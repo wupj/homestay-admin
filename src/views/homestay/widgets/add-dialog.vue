@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-model:visible="visible"
-    :header="operateType === 'add' ? '新增民宿' : '编辑民宿'"
+    :header="operateType === 'add' ? $t('homestay.addHomestay') : $t('homestay.editHomestay')"
     :style="{ width: '40rem' }"
     :draggable="false"
     @hide="handleClose"
@@ -57,7 +57,7 @@
             <FileUpload
               v-else-if="item.prop === 'thumb'"
               accept="image/*,video/*"
-              chooseLabel="点击上传"
+              :chooseLabel="$t('common.clickUpload')"
               :showUploadButton="false"
               :showCancelButton="false"
               @select="handleSelectFile"
@@ -75,7 +75,7 @@
                       border-400
                     "
                   />
-                  <p class="mt-4 mb-0">拖放文件到这里进行上传</p>
+                  <p class="mt-4 mb-0">{{ $t('common.dragAndDropFiles') }}</p>
                 </div>
               </template>
             </FileUpload>
@@ -86,7 +86,9 @@
               v-model="form[item.prop]"
               :placeholder="item.placeholder"
             />
-            <span class="unit ml-2" v-if="['antecedentMoney', 'rent'].includes(item.prop)">元</span>
+            <span class="unit ml-2" v-if="['antecedentMoney', 'rent'].includes(item.prop)">{{
+              $t('home.dollar')
+            }}</span>
             <small
               class="block p-error text-base"
               v-if="errorFields[item.prop] && errorFields[item.prop].length"
@@ -97,14 +99,22 @@
       </form>
     </div>
     <template #footer>
-      <Button class="mr-4" icon="pi pi-times" label="取消" @click="handleClose" text raised />
-      <Button icon="pi pi-check" label="确定" @click="handleSubmit" />
+      <Button
+        class="mr-4"
+        icon="pi pi-times"
+        :label="$t('common.cancel')"
+        @click="handleClose"
+        text
+        raised
+      />
+      <Button icon="pi pi-check" :label="$t('common.confirm')" @click="handleSubmit" />
     </template>
   </Dialog>
 </template>
 
 <script lang="ts" setup>
   import { ref, defineExpose } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useToast } from 'primevue/usetoast'
   import type { Rules } from 'async-validator'
   import useValidator from '@/hooks/useValidator'
@@ -113,6 +123,7 @@
 
   const emit = defineEmits(['done'])
 
+  const { t } = useI18n()
   const toast = useToast()
   const [areaLoading, setAreaLoading] = useLoading(false)
 
@@ -124,57 +135,57 @@
   const file = ref(null)
   const formArr = ref([
     {
-      label: '民宿名称',
+      label: t('home.homestayName'),
       prop: 'homestayName',
-      placeholder: '请输入民宿名称',
+      placeholder: t('order.enterHomestayName'),
       required: true,
     },
     {
-      label: '地方区域',
+      label: t('homestay.localArea'),
       prop: 'area',
-      placeholder: '请选择地方区域',
+      placeholder: t('homestay.selectLocalArea'),
       required: true,
     },
     {
-      label: '详细地址',
+      label: t('order.detailAddress'),
       prop: 'detailAddress',
-      placeholder: '请输入详细地址',
+      placeholder: t('homestay.enterDetailAddress'),
       required: false,
     },
     {
-      label: '租房类型',
+      label: t('homestay.rentType'),
       prop: 'rentType',
       enumType: 'rentType',
-      placeholder: '请选择租房类型',
+      placeholder: t('homestay.selectRentType'),
       required: true,
     },
     {
-      label: '押金',
+      label: t('home.antecedentMoney'),
       prop: 'antecedentMoney',
       placeholder: '请输入押金',
       required: false,
     },
     {
-      label: '租金',
+      label: t('order.rent'),
       prop: 'rent',
-      placeholder: '请输入租金',
+      placeholder: t('homestay.enterRent'),
       required: true,
     },
     {
-      label: '标签',
+      label: t('homestay.tag'),
       prop: 'tag',
       enumType: 'homestayTag',
-      placeholder: '请选择标签',
+      placeholder: t('homestay.selectTag'),
       required: false,
     },
     {
-      label: '民宿描述',
+      label: t('homestay.homestayDescribe'),
       prop: 'describe',
-      placeholder: '请输入民宿描述',
+      placeholder: t('homestay.enterHomestayDescribe'),
       required: false,
     },
     {
-      label: '图片/视频',
+      label: t('homestay.picturesAndVideos'),
       prop: 'thumb',
       required: false,
     },
@@ -193,19 +204,19 @@
   const rules: Rules = {
     homestayName: {
       required: true,
-      message: '请输入民宿名称',
+      message: t('order.enterHomestayName'),
     },
     area: {
       required: true,
-      message: '请选择地方区域',
+      message: t('homestay.selectLocalArea'),
     },
     rentType: {
       required: true,
-      message: '请选择租房类型',
+      message: t('homestay.selectRentType'),
     },
     rent: {
       required: true,
-      message: '请输入租金',
+      message: t('homestay.enterRent'),
     },
   }
 
@@ -269,7 +280,7 @@
     if (pass) {
       toast.add({
         severity: 'success',
-        detail: '操作成功',
+        detail: t('message.operationSuccessful'),
         life: 3000,
       })
       handleClose()

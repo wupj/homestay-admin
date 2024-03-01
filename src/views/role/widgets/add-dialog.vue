@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-model:visible="visible"
-    :header="operateType === 'add' ? '新增角色' : '编辑角色'"
+    :header="operateType === 'add' ? $t('role.addRole') : $t('role.editRole')"
     :style="{ width: '40rem' }"
     :draggable="false"
     @hide="handleClose"
@@ -42,41 +42,50 @@
       </form>
     </div>
     <template #footer>
-      <Button class="mr-4" icon="pi pi-times" label="取消" @click="handleClose" text raised />
-      <Button icon="pi pi-check" label="确定" @click="handleSubmit" />
+      <Button
+        class="mr-4"
+        icon="pi pi-times"
+        :label="$t('common.cancel')"
+        @click="handleClose"
+        text
+        raised
+      />
+      <Button icon="pi pi-check" :label="$t('common.confirm')" @click="handleSubmit" />
     </template>
   </Dialog>
 </template>
 
 <script lang="ts" setup>
   import { ref, defineExpose } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useToast } from 'primevue/usetoast'
   import { Rules } from 'async-validator'
   import useValidator from '@/hooks/useValidator'
 
   const emit = defineEmits(['done'])
 
+  const { t } = useI18n()
   const toast = useToast()
 
   const visible = ref(false)
   const operateType = ref('')
   const formArr = ref([
     {
-      label: '角色编号',
+      label: t('role.roleNo'),
       prop: 'roleNo',
-      placeholder: '请输入角色编号',
+      placeholder: t('role.enterRoleNo'),
       required: true,
     },
     {
-      label: '角色名称',
+      label: t('role.roleName'),
       prop: 'roleName',
-      placeholder: '请输入角色名称',
+      placeholder: t('role.enterRoleName'),
       required: true,
     },
     {
-      label: '角色描述',
+      label: t('role.roleDescribe'),
       prop: 'describe',
-      placeholder: '请输入角色描述',
+      placeholder: t('role.enterRoleDescribe'),
       required: false,
     },
   ])
@@ -88,11 +97,11 @@
   const rules: Rules = {
     roleNo: {
       required: true,
-      message: '请输入角色编号',
+      message: t('role.enterRoleNo'),
     },
     roleName: {
       required: true,
-      message: '请输入角色名称',
+      message: t('role.enterRoleName'),
     },
   }
 
@@ -121,7 +130,7 @@
     if (pass) {
       toast.add({
         severity: 'success',
-        detail: '操作成功',
+        detail: t('message.operationSuccessful'),
         life: 3000,
       })
       handleClose()

@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-model:visible="visible"
-    header="配置权限"
+    :header="$t('role.configurePermissions')"
     :style="{ width: '40rem' }"
     :draggable="false"
     @hide="handleClose"
@@ -16,23 +16,32 @@
         :value="authTree"
         selectionMode="checkbox"
         filter="label"
-        filterPlaceholder="搜索"
+        :filterPlaceholder="$t('common.search')"
       />
     </div>
     <template #footer>
-      <Button class="mr-4" icon="pi pi-times" label="取消" @click="handleClose" text raised />
-      <Button icon="pi pi-check" label="确定" @click="handleSubmit" />
+      <Button
+        class="mr-4"
+        icon="pi pi-times"
+        :label="$t('common.cancel')"
+        @click="handleClose"
+        text
+        raised
+      />
+      <Button icon="pi pi-check" :label="$t('common.confirm')" @click="handleSubmit" />
     </template>
   </Dialog>
 </template>
 
 <script lang="ts" setup>
   import { ref, defineExpose } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useToast } from 'primevue/usetoast'
   import { getAuthTree } from '@/api'
 
   const emit = defineEmits(['done'])
 
+  const { t } = useI18n()
   const toast = useToast()
 
   const visible = ref(false)
@@ -78,7 +87,7 @@
     console.log(selectAuth.value)
     toast.add({
       severity: 'success',
-      detail: '操作成功',
+      detail: t('message.operationSuccessful'),
       life: 3000,
     })
     handleClose()

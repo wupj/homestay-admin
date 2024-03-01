@@ -11,7 +11,7 @@
       <Button
         class="ml-4"
         icon="pi pi-download"
-        v-tooltip.top="'导出'"
+        v-tooltip.top="$t('common.export')"
         @click="handleExport"
         text
         raised
@@ -46,6 +46,7 @@
 
 <script lang="tsx" setup>
   import { ref, unref, computed } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   const props = defineProps({
     columns: {
@@ -91,12 +92,14 @@
 
   const emit = defineEmits(['export'])
 
+  const { t } = useI18n()
+
   const tableColumns = computed(() => {
     const columns = [...unref(props.columns)]
     if (props.showSerial) {
       columns.unshift({
         field: 'serial',
-        header: '序号',
+        header: t('common.serial'),
         class: 'w-4rem',
         render: ({ index }) => {
           return <span>{index + 1}</span>

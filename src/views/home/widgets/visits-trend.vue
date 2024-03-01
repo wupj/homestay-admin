@@ -17,7 +17,7 @@
             v-model="date"
             selectionMode="range"
             dateFormat="yy-mm-dd"
-            placeholder="请选择时间段"
+            :placeholder="$t('coupon.selectTimePeriod')"
             :manualInput="false"
             @date-select="getChartData"
             showIcon

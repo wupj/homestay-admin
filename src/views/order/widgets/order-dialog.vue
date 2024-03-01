@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-model:visible="visible"
-    :header="operateType === 'check' ? '入住操作' : '取消订单'"
+    :header="operateType === 'check' ? $t('order.checkInOperate') : $t('order.cancelOrder')"
     :style="{ width: '50rem' }"
     :draggable="false"
     @hide="handleClose"
@@ -11,7 +11,7 @@
       <div class="form-field w-full flex justify-content-start">
         <div class="font-semibold mr-2"
           ><label class="is-required">{{
-            operateType === 'check' ? '备注内容' : '取消理由'
+            operateType === 'check' ? $t('order.remarks') : $t('order.cancelReason')
           }}</label></div
         >
         <div class="flex-1 relative">
@@ -19,7 +19,7 @@
             class="w-full"
             v-model="form.remark"
             rows="3"
-            placeholder="请输入内容，100字以内"
+            :placeholder="$t('message.pleaseEnterContentWithin100Words')"
           />
           <small class="block p-error text-base" v-if="errorFields?.remark?.length">{{
             errorFields.remark[0].message
@@ -28,8 +28,15 @@
       </div>
     </div>
     <template #footer>
-      <Button class="mr-4" icon="pi pi-times" label="取消" @click="handleClose" text raised />
-      <Button icon="pi pi-check" label="确定" @click="handleSubmit" />
+      <Button
+        class="mr-4"
+        icon="pi pi-times"
+        :label="$t('common.cancel')"
+        @click="handleClose"
+        text
+        raised
+      />
+      <Button icon="pi pi-check" :label="$t('common.confirm')" @click="handleSubmit" />
     </template>
     <Toast position="center" />
   </Dialog>
@@ -37,6 +44,7 @@
 
 <script lang="ts" setup>
   import { ref, defineExpose } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import Toast from 'primevue/toast'
   import { useToast } from 'primevue/usetoast'
   import type { Rules } from 'async-validator'
@@ -44,6 +52,7 @@
 
   const emit = defineEmits(['done'])
 
+  const { t } = useI18n()
   const toast = useToast()
 
   const visible = ref(false)
@@ -56,11 +65,11 @@
     remark: [
       {
         required: true,
-        message: '请输入内容',
+        message: t('message.pleaseEnterContent'),
       },
       {
         max: 100,
-        message: '内容不能超过100字',
+        message: t('message.contentCannotExceed100Words'),
       },
     ],
   }
@@ -83,7 +92,7 @@
     if (pass) {
       toast.add({
         severity: 'success',
-        detail: '操作成功',
+        detail: t('message.operationSuccessful'),
         life: 3000,
       })
       handleClose()

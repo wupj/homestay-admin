@@ -4,24 +4,42 @@
       <template #content>
         <div class="flex justify-content-start align-items-center">
           <div class="field mr-4">
-            <label class="font-semibold mr-2">民宿名称</label>
-            <InputText type="text" v-model="queryForm.homestayName" placeholder="请输入民宿名称" />
+            <label class="font-semibold mr-2">{{ $t('home.homestayName') }}</label>
+            <InputText
+              type="text"
+              v-model="queryForm.homestayName"
+              :placeholder="$t('order.enterHomestayName')"
+            />
           </div>
           <div class="field mr-4">
-            <label class="font-semibold mr-2">订单编号</label>
-            <InputText type="text" v-model="queryForm.orderNo" placeholder="请输入订单编号" />
+            <label class="font-semibold mr-2">{{ $t('order.orderNo') }}</label>
+            <InputText
+              type="text"
+              v-model="queryForm.orderNo"
+              :placeholder="$t('order.enterOrderNo')"
+            />
           </div>
           <div class="field mr-4">
-            <label class="font-semibold mr-2">支付方式</label>
+            <label class="font-semibold mr-2">{{ $t('order.paymentMethod') }}</label>
             <EnumSelect
               v-model="queryForm.paymentMode"
               enumType="paymentMode"
-              placeholder="请选择支付方式"
+              :placeholder="$t('order.selectPaymentMethod')"
             />
           </div>
           <div class="field">
-            <Button class="mr-2" icon="pi pi-search" label="查询" @click="handleSearch" />
-            <Button icon="pi pi-refresh" severity="warning" label="重置" @click="handleReset" />
+            <Button
+              class="mr-2"
+              icon="pi pi-search"
+              :label="$t('common.query')"
+              @click="handleSearch"
+            />
+            <Button
+              icon="pi pi-refresh"
+              severity="warning"
+              :label="$t('common.reset')"
+              @click="handleReset"
+            />
           </div>
         </div>
       </template>
@@ -49,7 +67,7 @@
             <Button
               icon="pi pi-trash"
               severity="danger"
-              label="取消"
+              :label="$t('common.cancel')"
               :disabled="!selectRow.length"
               @click="handleOpenDialog('cancel')"
             />
@@ -65,6 +83,7 @@
 <script lang="tsx" setup>
   import { ref, onMounted } from 'vue'
   import { useRouter } from 'vue-router'
+  import { useI18n } from 'vue-i18n'
   import Toast from 'primevue/toast'
   import EnumSelect from '@/components/business/enum-select'
   import Table from '@/components/basic/table'
@@ -75,6 +94,7 @@
   import useLoading from '@/hooks/useLoading'
 
   const router = useRouter()
+  const { t } = useI18n()
 
   const queryForm = ref({
     homestayName: '',
@@ -99,42 +119,42 @@
   const tableColumn = ref([
     {
       field: 'orderNo',
-      header: '订单编号',
+      header: t('order.orderNo'),
       sortable: true,
     },
     {
       field: 'orderTime',
-      header: '下单时间',
+      header: t('order.orderTime'),
       sortable: true,
     },
     {
       field: 'userAccount',
-      header: '用户名称',
+      header: t('order.userName'),
       sortable: true,
     },
     {
       field: 'phone',
-      header: '手机号码',
+      header: t('order.phone'),
       sortable: true,
     },
     {
       field: 'homestayName',
-      header: '民宿名称',
+      header: t('home.homestayName'),
       sortable: true,
     },
     {
       field: 'address',
-      header: '地址',
+      header: t('order.address'),
       class: 'w-2',
     },
     {
       field: 'orderAmount',
-      header: '订单金额（元）',
+      header: `${t('order.orderAmount')}(${t('home.dollar')})`,
       sortable: true,
     },
     {
       field: 'paymentMode',
-      header: '支付方式',
+      header: t('order.paymentMethod'),
       sortable: true,
       render: ({ data }) => {
         return <span>{getEnumLabel('paymentMode', data.paymentMode)}</span>
@@ -142,7 +162,7 @@
     },
     {
       field: 'orderState',
-      header: '订单状态',
+      header: t('order.orderState'),
       sortable: true,
       render: ({ data }) => {
         return <span>{getEnumLabel('orderState', data.orderState)}</span>
@@ -150,21 +170,27 @@
     },
     {
       field: 'operate',
-      header: '操作',
+      header: t('common.operate'),
+      class: 'w-2',
       render: ({ data }) => {
         return (
           <div>
-            <Button class="p-0" label="详情" text onClick={() => handleDetail(data)} />
+            <Button
+              class="p-0"
+              label={t('common.detail')}
+              text
+              onClick={() => handleDetail(data)}
+            />
             <Button
               class="p-0 ml-4"
-              label="入住"
+              label={t('order.checkIn')}
               severity="info"
               text
               onClick={() => handleOpenDialog('check', data)}
             />
             <Button
               class="p-0 ml-4"
-              label="取消"
+              label={t('common.cancel')}
               severity="warning"
               text
               onClick={() => handleOpenDialog('cancel', data)}
@@ -178,35 +204,35 @@
   const stateTab = ref([
     {
       key: 0,
-      label: '全部',
+      label: t('common.all'),
     },
     {
       key: 1,
-      label: '待支付',
+      label: t('home.toBePaid'),
     },
     {
       key: 2,
-      label: '已确认',
+      label: t('home.confirmed'),
     },
     {
       key: 3,
-      label: '已入住',
+      label: t('enums.checkedIn'),
     },
     {
       key: 4,
-      label: '退款中',
+      label: t('home.refundProgress'),
     },
     {
       key: 5,
-      label: '待评价',
+      label: t('enums.toBeEvaluated'),
     },
     {
       key: 6,
-      label: '已完成',
+      label: t('enums.completed'),
     },
     {
       key: 7,
-      label: '已取消',
+      label: t('enums.canceled'),
     },
   ])
   const selectRow = ref([])

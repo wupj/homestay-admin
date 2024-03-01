@@ -1,9 +1,9 @@
 <template>
   <div class="container">
-    <Button class="mb-4" label="返回" icon="pi pi-arrow-left" @click="handleBack" />
+    <Button class="mb-4" :label="$t('common.return')" icon="pi pi-arrow-left" @click="handleBack" />
     <Card class="mb-4">
       <template #content>
-        <div class="card-title mb-3">订单信息</div>
+        <div class="card-title mb-3">{{ $t('order.orderInfo') }}</div>
         <div class="flex justify-content-start align-items-center flex-wrap">
           <div class="field w-6" v-for="(item, index) in orderArr" :key="index">
             <label class="w-3 pr-6 text-right font-semibold">{{ item.label }}</label>
@@ -22,7 +22,7 @@
     </Card>
     <Card class="mb-4">
       <template #content>
-        <div class="card-title mb-3">民宿信息</div>
+        <div class="card-title mb-3">{{ $t('order.homestayInfo') }}</div>
         <div class="flex justify-content-start align-items-center flex-wrap">
           <div class="field w-6" v-for="(item, index) in homestayArr" :key="index">
             <label class="w-3 pr-6 text-right font-semibold">{{ item.label }}</label>
@@ -59,7 +59,7 @@
     </Card>
     <Card class="mb-4">
       <template #content>
-        <div class="card-title mb-3">买家信息</div>
+        <div class="card-title mb-3">{{ $t('order.buyerInfo') }}</div>
         <div class="flex justify-content-start align-items-center flex-wrap">
           <div class="field w-6" v-for="(item, index) in userArr" :key="index">
             <label class="w-3 pr-6 text-right font-semibold">{{ item.label }}</label>
@@ -73,7 +73,7 @@
     </Card>
     <Card class="mb-4">
       <template #content>
-        <div class="card-title mb-3">订单记录</div>
+        <div class="card-title mb-3">{{ $t('order.orderRecords') }}</div>
         <Timeline class="order-record" :value="detailData.orderRecords">
           <template #content="scope">
             <div class="line-height-3 text-lg font-semibold">{{ scope.item.recordTitle }}</div>
@@ -92,93 +92,95 @@
 <script lang="ts" setup>
   import { ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
+  import { useI18n } from 'vue-i18n'
   import { getOrderDetail } from '@/api'
   import { getEnumLabel } from '@/utils/enums'
   import { getFileSuffix } from '@/utils'
 
   const route = useRoute()
   const router = useRouter()
+  const { t } = useI18n()
 
   const orderArr = ref([
     {
       field: 'orderNo',
-      label: '订单编号',
+      label: t('order.orderNo'),
     },
     {
       field: 'orderTime',
-      label: '下单时间',
+      label: t('order.orderTime'),
     },
     {
       field: 'paymentMode',
-      label: '付款方式',
+      label: t('order.paymentMode'),
     },
     {
       field: 'paymentTime',
-      label: '付款时间',
+      label: t('order.paymentTime'),
     },
     {
       field: 'giveIntegral',
-      label: '赠送积分',
+      label: t('order.giveIntegral'),
     },
     {
       field: 'orderAmount',
-      label: '订单金额',
+      label: t('order.orderAmount'),
     },
     {
       field: 'discountAmount',
-      label: '优惠金额',
+      label: t('order.discountAmount'),
     },
     {
       field: 'paidAmount',
-      label: '实付金额',
+      label: t('order.paidAmount'),
     },
   ])
   const homestayArr = ref([
     {
       field: 'homestayName',
-      label: '民宿名称',
+      label: t('home.homestayName'),
     },
     {
       field: 'address',
-      label: '详细地址',
+      label: t('order.detailAddress'),
     },
     {
       field: 'rentType',
-      label: '出租类型',
+      label: t('order.rentType'),
     },
     {
       field: 'antecedentMoney',
-      label: '押金',
+      label: t('home.antecedentMoney'),
     },
     {
       field: 'rent',
-      label: '租金',
+      label: t('order.rent'),
     },
     {
       field: 'moreInfo',
-      label: '补充说明',
+      label: t('order.moreInfo'),
     },
     {
       field: 'pictureVideo',
-      label: '图片视频',
+      label: t('order.pictureVideo'),
     },
   ])
   const userArr = ref([
     {
       field: 'userAccount',
-      label: '用户账号',
+      label: t('order.userAccount'),
     },
     {
       field: 'contactAddress',
-      label: '联系地址',
+      label: t('order.contactAddress'),
     },
     {
       field: 'orderMethod',
-      label: '下单方式',
+      label: t('order.orderMethod'),
     },
     {
       field: 'remarks',
-      label: '备注内容',
+      label: t('order.remarks'),
     },
   ])
 
