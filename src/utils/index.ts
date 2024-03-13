@@ -52,6 +52,9 @@ export const generateRoute = (menus: []) => {
     if (menu.component && !menu.children) {
       menu.component = modules[`/src/views${menu.component}.vue`]
     }
+    menu.meta = {
+      label: menu.label,
+    }
   })
   return menus
 }

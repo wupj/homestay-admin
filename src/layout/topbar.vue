@@ -25,16 +25,18 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import useTheme from '@/hooks/useTheme'
   import useLocale from '@/hooks/useLocale'
 
+  const { t } = useI18n()
   const barItems = ref([
     {
       label: '',
       icon: 'pi-user',
       items: [
         {
-          label: '退出登录',
+          label:  t('common.signOut'),
           icon: 'pi-sign-out',
         },
       ],
