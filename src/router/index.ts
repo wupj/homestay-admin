@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouterOptions } from 'vue-router'
 import Layout from '@/layout'
+import { useUserStore } from '@/store'
 import { useAppStore } from '@/store'
 
 const routes = [
@@ -24,12 +25,21 @@ const router = createRouter({
 } as RouterOptions)
 
 router.beforeResolve(async (to, from, next) => {
-  const appStore = useAppStore()
-  if (appStore.routes.length === 0) {
-    await appStore.setRoutes()
-    next({ path: to.fullPath, replace: true, query: to.query })
+  const userStore = useUserStore()
+  if (userStore.getToken()) {
+    const appStore = useAppStore()
+    if (appStore.routes.length === 0) {
+      await appStore.setRoutes()
+      next({ path: to.fullPath, replace: true, query: to.query })
+    } else {
+      next()
+    }
   } else {
-    next()
+    if (to.path !== '/login') {
+      next({ path: '/login', replace: true, query: to.query })
+    } else {
+      next()
+    }
   }
 })
 

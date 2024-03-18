@@ -28,15 +28,17 @@
   import { useI18n } from 'vue-i18n'
   import useTheme from '@/hooks/useTheme'
   import useLocale from '@/hooks/useLocale'
+  import { useUserStore } from '@/store'
 
   const { t } = useI18n()
+  const userStore = useUserStore()
   const barItems = ref([
     {
       label: '',
       icon: 'pi-user',
       items: [
         {
-          label:  t('common.signOut'),
+          label: t('common.signOut'),
           icon: 'pi-sign-out',
         },
       ],
@@ -54,7 +56,9 @@
     changeLocale(locale.value === 'zh-CN' ? 'en-US' : 'zh-CN')
   }
 
-  const handleLogOut = () => {}
+  const handleLogOut = () => {
+    userStore.logOut()
+  }
 </script>
 
 <style lang="scss" scoped>
