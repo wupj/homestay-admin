@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import i18n from '@/locale'
 
 export interface HttpResponse<T = unknown> {
   message: string
@@ -12,6 +13,9 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config) => {
+    config.headers = {
+      lang: i18n.global.locale.value,
+    }
     return config
   },
   (error) => {

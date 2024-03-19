@@ -4,7 +4,7 @@
       <template #content>
         <div class="logo w-full h-5rem flex justify-content-start align-items-center"
           ><SvgIcon class="w-4rem h-full" iconName="logo" className="logo" />
-          <div class="text-2xl font-semibold ml-4">共享民宿系统</div></div
+          <div class="text-2xl font-semibold ml-4">{{ $t('common.sharedHomestay') }}</div></div
         >
         <Menu :model="menus">
           <template #item="{ item, props }">

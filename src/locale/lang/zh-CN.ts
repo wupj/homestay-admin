@@ -1,4 +1,5 @@
 export default {
+  'common.sharedHomestay': '共享民宿系统',
   'common.query': '查询',
   'common.reset': '重置',
   'common.cancel': '取消',

@@ -45,7 +45,7 @@ router.beforeResolve(async (to, from, next) => {
 
 router.afterEach((to, from) => {
   const appStore = useAppStore()
-  if (!appStore.tabsList.some((o) => o.fullPath === to.fullPath)) {
+  if (to.fullPath !== '/login' && !appStore.tabsList.some((o) => o.fullPath === to.fullPath)) {
     appStore.addTabs(to)
   }
   window.scrollTo(0, 0)

@@ -1,4 +1,5 @@
 export default {
+  'common.sharedHomestay': 'Shared Homestay',
   'common.query': 'Query',
   'common.reset': 'Reset',
   'common.cancel': 'Cancel',
