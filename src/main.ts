@@ -12,6 +12,7 @@ import '@/utils/request'
 import 'virtual:svg-icons-register'
 
 import 'normalize.css/normalize.css'
+import 'primeicons/primeicons.css'
 import '@/styles/index.scss'
 
 import App from './App.vue'
